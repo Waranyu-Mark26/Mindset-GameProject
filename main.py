@@ -1,6 +1,6 @@
 import arcade
 import time
-from Containers.MainMenu import MenuView
+from Containers.Credit import CreditView
 from Example.gradients import MyGame
 
 # from Components import Comp1
@@ -78,14 +78,14 @@ def main():
     window = MyApp(WIDTH, HEIGHT, "Algorithm Adventure")
     window.setup()
 
-    # menu_view = MenuView()
-    # window.show_view(menu_view)
+    menu_view = CreditView()
+    window.show_view(menu_view)
     
     arcade.run()
 
     time.sleep(1)
     arcade.close_window()
-    window = MyGame(WIDTH,HEIGHT,"Hello")
+    dwindow = MyGame(WIDTH,HEIGHT,"Hello")
     arcade.run()
 
 
