@@ -16,4 +16,4 @@ class MenuView(arcade.View):
         # game_view = GameView()
         # game_view.setup()
         # self.window.show_view(game_view)
-        print('Hello')
+        print('Hello World')
