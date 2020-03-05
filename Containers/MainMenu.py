@@ -8,7 +8,22 @@ Credit --> Credit Page
 WIDTH = 1280
 HEIGHT = 720
 
+from arcade.gui import *
 import arcade
+import os
+
+class PlayButton(TextButton):
+    def __init__(self, game, x=0, y=0, width=100, height=100, text="", theme=None):
+        super().__init__(x, y, width, height, text, theme=theme)
+        self.game = game
+
+    def on_press(self):
+        self.pressed = True
+
+    def on_release(self):
+        if self.pressed:
+            self.game.pause = False
+            self.pressed = False
 
 class MenuView(arcade.View):
 
@@ -17,17 +32,43 @@ class MenuView(arcade.View):
         self.width = WIDTH
         self.height = HEIGHT
 
+        self.background = arcade.load_texture("Resources/game-bg.jpg")
+
+        # setup theme
+        self.theme = Theme()
+        self.theme.set_font(24, arcade.color.WHITE)
+        self.set_button_textures()
+
+        # set button
+        self.set_buttons()
+
     def on_show(self):
         arcade.set_background_color(arcade.color.TOPAZ)
-        # self.background = arcade.load_texture("Resources/game-bg.jpg")
+        
 
     def on_resize(self, width=WIDTH, height=HEIGHT):
         """ This method is automatically called when the window is resized. """
-        
-        # print(f"Window resized to: {width}, {height}")
         self.width,self.height = width,height
+
+    def set_button_textures(self):
+        normal = "Resources/PlayButton/play-btn-normal.png"
+        hover = "Resources/PlayButton/play-btn-hover.png"
+        clicked = "Resources/PlayButton/play-btn-clicked.png"
+        locked = "Resources/PlayButton/play-btn-locked.png"
+        self.theme.add_button_textures(normal, hover, clicked, locked)
+
+    def set_buttons(self):
+        self.button_list.append(PlayButton(self, self.width/2, self.height/2, 150, 150,theme=self.theme))
 
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("Main Menu", start_x=self.width/2, start_y=self.height/2+100,
-                         color=arcade.color.BLACK, font_size=30, anchor_x="center")
+        
+        scale = (self.width) / WIDTH
+        arcade.draw_lrwh_rectangle_textured(0, (self.height-HEIGHT*scale)/2,
+                                            WIDTH*scale, HEIGHT*scale,
+                                            self.background)
+
+        arcade.draw_text("MAIN MENU", start_x=self.width/2, start_y=self.height/2+150,
+                         color=arcade.color.DARK_CORAL, font_size=45, anchor_x="center", anchor_y="center", font_name='')
+
+        super().on_draw()
