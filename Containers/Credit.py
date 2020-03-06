@@ -10,7 +10,10 @@ class CreditView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        arcade.draw_text("Mr. Traimaen Pheoemhansa 6210500528", WIDTH / 2, HEIGHT / 2, arcade.color.BLACK, font_size=50,
-                         anchor_x="left",anchor_y="center")
-        arcade.draw_text("MR Warunyu Narungsri", 640, 360, arcade.color.BLACK, font_size=30,anchor_x="left",anchor_y="top")
-        arcade.draw_text_2("Mr Traiman Phemhansa",WIDTH/2,HEIGHT/2,arcade.color.BLACK,font_size=12,anchor_x="center",anchor_y="top")
+        arcade.draw_text("Members of the group Mindset",WIDTH/2,620,arcade.color.BLACK,font_size=30,anchor_x="center")
+        arcade.draw_text("Mr. Traimaen Pheoemhansa 6210500528", 100, 520, arcade.color.BLACK, font_size=30)
+        arcade.draw_text("Mr. Waranyu Narangsi 6210500561", 100, 390, arcade.color.BLACK, font_size=30, font_name="Arial")
+        arcade.draw_text("Mr. Saranphat Janwatsiri 6210500781", 100, 260, arcade.color.BLACK, font_size=30, font_name="Arial")
+        arcade.draw_text("Mr. Thitisak Siratchatamatawin 6210503551", 100, 130, arcade.color.BLACK, font_size=30, font_name="Chakra Petch")
+
+
