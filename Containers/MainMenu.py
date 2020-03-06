@@ -37,7 +37,6 @@ class MenuView(arcade.View):
         # setup theme
         self.theme = Theme()
         self.theme.set_font(24, arcade.color.WHITE)
-        self.set_button_textures()
 
         # set button
         self.set_buttons()
@@ -50,15 +49,20 @@ class MenuView(arcade.View):
         """ This method is automatically called when the window is resized. """
         self.width,self.height = width,height
 
-    def set_button_textures(self):
-        normal = "Resources/PlayButton/play-btn-normal.png"
-        hover = "Resources/PlayButton/play-btn-hover.png"
-        clicked = "Resources/PlayButton/play-btn-clicked.png"
-        locked = "Resources/PlayButton/play-btn-locked.png"
+    def set_button_textures(self, dir):
+        normal = f"Resources/{dir}-normal.png"
+        hover = f"Resources/{dir}-hover.png"
+        clicked = f"Resources/{dir}-clicked.png"
+        locked = f"Resources/{dir}-locked.png"
         self.theme.add_button_textures(normal, hover, clicked, locked)
 
     def set_buttons(self):
+        self.set_button_textures('PlayButton/play-btn')
         self.button_list.append(PlayButton(self, self.width/2, self.height/2, 150, 150,theme=self.theme))
+        self.set_button_textures('TutorialButton/tutorial-btn')
+        self.button_list.append(PlayButton(self, self.width/2-35, self.height/2-110, 80, 80,theme=self.theme))
+        self.set_button_textures('InformationButton/information-btn')
+        self.button_list.append(PlayButton(self, self.width/2+35, self.height/2-110, 80, 80,theme=self.theme))
 
     def on_draw(self):
         arcade.start_render()
@@ -68,7 +72,7 @@ class MenuView(arcade.View):
                                             WIDTH*scale, HEIGHT*scale,
                                             self.background)
 
-        arcade.draw_text("MAIN MENU", start_x=self.width/2, start_y=self.height/2+150,
-                         color=arcade.color.DARK_CORAL, font_size=45, anchor_x="center", anchor_y="center", font_name='')
+        arcade.draw_text("MENU", start_x=self.width/2, start_y=self.height/2+150,
+                         color=arcade.color.DARK_BYZANTIUM, font_size=45, anchor_x="center", anchor_y="center", font_name='')
 
         super().on_draw()

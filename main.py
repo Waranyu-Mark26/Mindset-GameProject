@@ -10,7 +10,7 @@ WIDTH = 1280
 HEIGHT = 720
 
 def main():
-    window = arcade.Window(WIDTH, HEIGHT, "Algorithm Adventure", resizable=True)
+    window = arcade.Window(WIDTH, HEIGHT, "Algorithm Adventure", resizable=False, fullscreen=False)
 
     menu_view = MenuView()
     window.show_view(menu_view)
