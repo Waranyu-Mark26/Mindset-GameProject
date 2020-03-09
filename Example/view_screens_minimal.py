@@ -21,9 +21,8 @@ import arcade
 import os
 
 
-WIDTH = 1920
-HEIGHT = 1080
-
+WIDTH = 1280
+HEIGHT = 720
 
 class MenuView(arcade.View):
     def on_show(self):
