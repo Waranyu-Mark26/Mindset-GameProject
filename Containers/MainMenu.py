@@ -31,8 +31,8 @@ class MenuView(arcade.View):
         super().__init__()
         self.width = WIDTH
         self.height = HEIGHT
-
         self.background = arcade.load_texture("Resources/game-bg.jpg")
+        
 
         # setup theme
         self.theme = Theme()

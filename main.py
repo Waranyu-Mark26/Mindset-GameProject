@@ -2,6 +2,7 @@ import arcade
 import time
 from Containers.Credit import CreditView
 from Containers.MainMenu import MenuView
+from Containers.StageSelection import Stageview
 
 # from Components import Comp1
 # k = Comp1.MenuView()
@@ -16,7 +17,6 @@ def main():
     window.show_view(menu_view)
       
     arcade.run()
-
 
 if __name__ == "__main__":
     main()
