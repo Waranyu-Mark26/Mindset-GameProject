@@ -3,7 +3,7 @@ import time
 from Containers.Credit import CreditView
 from Containers.MainMenu import MenuView
 
-# from Components import Comp1
+# from Components import Comp1    
 # k = Comp1.MenuView()
 
 WIDTH = 1280   
