@@ -2,9 +2,9 @@ import arcade
 import time
 from Containers.Credit import CreditView
 from Containers.MainMenu import MenuView
-from Containers.StageSelection import Stageview
+from Containers.Tutorial import TutorialView
 
-# from Components import Comp1
+# from Components import Comp1    
 # k = Comp1.MenuView()
 
 WIDTH = 1280   
@@ -17,6 +17,7 @@ def main():
     window.show_view(menu_view)
       
     arcade.run()
+    
 
 if __name__ == "__main__":
     main()
