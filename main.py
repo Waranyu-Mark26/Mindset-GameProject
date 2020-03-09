@@ -6,7 +6,7 @@ from Containers.MainMenu import MenuView
 # from Components import Comp1
 # k = Comp1.MenuView()
 
-WIDTH = 1280
+WIDTH = 1280   
 HEIGHT = 720
 
 def main():
@@ -14,7 +14,7 @@ def main():
 
     menu_view = MenuView()
     window.show_view(menu_view)
-    
+      
     arcade.run()
 
 
