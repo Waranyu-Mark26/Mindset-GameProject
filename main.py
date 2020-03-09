@@ -16,6 +16,7 @@ def main():
     window.show_view(menu_view)
       
     arcade.run()
+    #test
 
 
 if __name__ == "__main__":
