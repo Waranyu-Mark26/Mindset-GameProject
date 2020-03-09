@@ -4,6 +4,8 @@ from Containers.Credit import CreditView
 from Containers.MainMenu import MenuView
 from Containers.Tutorial import TutorialView
 
+
+
 # from Components import Comp1    
 # k = Comp1.MenuView()
 
@@ -13,7 +15,7 @@ HEIGHT = 720
 def main():
     window = arcade.Window(WIDTH, HEIGHT, "Algorithm Adventure", resizable=False, fullscreen=False)
 
-    menu_view = MenuView()
+    menu_view = back()
     window.show_view(menu_view)
       
     arcade.run()
