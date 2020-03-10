@@ -3,8 +3,6 @@ from Containers.StageSelection import Stageview
 from Containers.Tutorial import TutorialView
 from Containers.Credit import CreditView
 import arcade
-# import os, sys
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 WIDTH = 1280
 HEIGHT = 720
@@ -30,7 +28,7 @@ class Button(TextButton):
         if self.pressed:
             self.pressed = False
 
-            print(self.view_state)
+            # print(self.view_state)
             if self.view_state != None:
                 global view_state_change
                 view_state_change = self.view_state
@@ -51,6 +49,8 @@ class MenuView(arcade.View):
         self.set_buttons()
 
     def on_show(self):
+        global view_state_change
+        view_state_change = 0
         arcade.set_background_color(arcade.color.TOPAZ)
 
     def on_resize(self, width=WIDTH, height=HEIGHT):
@@ -89,7 +89,8 @@ class MenuView(arcade.View):
         if view_state_change == 1:
             self.window.show_view(Stageview())
         elif view_state_change == 2:
-            self.window.show_view(TutorialView())
+            tutorial = TutorialView(self)
+            self.window.show_view(tutorial)
         elif view_state_change == 3:
             self.window.show_view(CreditView())
 
