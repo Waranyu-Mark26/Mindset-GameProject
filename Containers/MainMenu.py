@@ -1,29 +1,31 @@
-# Play, Tutorial, Credit
-"""
-Play --> Stage Selection --> Game
-Tutorial --> Tutorial Page
-Credit --> Credit Page
-"""
-
+from arcade.gui import *
+from Credit import CreditView
+import arcade
+# from Window import MyGame as window
+# import os, sys
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# import main
+# main.change_view()
 WIDTH = 1280
 HEIGHT = 720
 
-from arcade.gui import *
-import arcade
-import os
-
-class PlayButton(TextButton):
-    def __init__(self, game, x=0, y=0, width=100, height=100, text="", theme=None):
+class Button(TextButton):
+    def __init__(self, x=0, y=0, width=100, height=100, text="", theme=None, view=None):
         super().__init__(x, y, width, height, text, theme=theme)
-        self.game = game
+        self.view = view
 
     def on_press(self):
         self.pressed = True
 
     def on_release(self):
         if self.pressed:
-            self.game.pause = False
             self.pressed = False
+            print(self.view)
+            # change_view()
+            # window.show_view(CreditView())
+            if self.view != None:
+                pass
+                # main.menu_view.window.show_view(self.view)
 
 class MenuView(arcade.View):
 
@@ -43,7 +45,6 @@ class MenuView(arcade.View):
 
     def on_show(self):
         arcade.set_background_color(arcade.color.TOPAZ)
-        
 
     def on_resize(self, width=WIDTH, height=HEIGHT):
         """ This method is automatically called when the window is resized. """
@@ -58,21 +59,31 @@ class MenuView(arcade.View):
 
     def set_buttons(self):
         self.set_button_textures('PlayButton/play-btn')
-        self.button_list.append(PlayButton(self, self.width/2, self.height/2, 150, 150,theme=self.theme))
+        self.button_list.append(Button(self.width/2, self.height/2, 150, 150,theme=self.theme))
         self.set_button_textures('TutorialButton/tutorial-btn')
-        self.button_list.append(PlayButton(self, self.width/2-35, self.height/2-110, 80, 80,theme=self.theme))
+        self.button_list.append(Button(self.width/2-35, self.height/2-110, 80, 80,theme=self.theme))
         self.set_button_textures('InformationButton/information-btn')
-        self.button_list.append(PlayButton(self, self.width/2+35, self.height/2-110, 80, 80,theme=self.theme))
+        self.button_list.append(Button(self.width/2+35, self.height/2-110, 80, 80,theme=self.theme, view=CreditView()))
 
     def on_draw(self):
         arcade.start_render()
-        
+
         scale = (self.width) / WIDTH
         arcade.draw_lrwh_rectangle_textured(0, (self.height-HEIGHT*scale)/2,
                                             WIDTH*scale, HEIGHT*scale,
                                             self.background)
 
         arcade.draw_text("MENU", start_x=self.width/2, start_y=self.height/2+150,
-                         color=arcade.color.DARK_BYZANTIUM, font_size=45, anchor_x="center", anchor_y="center", font_name='')
-
+                         color=arcade.color.DARK_BYZANTIUM, font_size=45, anchor_x="center", anchor_y="center", font_name='Arial')
         super().on_draw()
+
+    
+    def on_key_press(self, key, _modifiers):
+        if key == arcade.key.ESCAPE:
+            credit = CreditView()
+            self.window.show_view(credit)
+
+    def change_view(self):
+        print('hello')
+        credit = CreditView()
+        self.window.show_view(credit)
