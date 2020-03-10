@@ -1,5 +1,7 @@
 from arcade.gui import *
 import arcade
+# from Containers.MainMenu import MenuView
+
 WIDTH = 1280
 HEIGHT = 720
 
@@ -21,7 +23,7 @@ class StageButton(TextButton):
 
 class Stageview(arcade.View):
 
-    def __init__(self):
+    def __init__(self, previous_window):
         super().__init__()
         self.background = arcade.load_texture("Resources/View 4.jpg")
 
@@ -29,6 +31,7 @@ class Stageview(arcade.View):
         self.theme.set_font(55, arcade.color.WHITE,font_name=('Calibri'))
 
         self.set_buttons()
+        self.previous_window = previous_window
     
     def set_button_textures(self):
         normal = "Resources/StageSelectionButton/StageButton.png"
@@ -52,16 +55,8 @@ class Stageview(arcade.View):
 
     def on_show(self):
         arcade.set_background_color(arcade.color.WHITE)
-
-'''Test'''
     
-def main():
-    window = arcade.Window(WIDTH, HEIGHT, "Algorithm Adventure", resizable=False, fullscreen=False)
-    menu_view = Stageview()
-    window.show_view(menu_view)
-      
-    arcade.run()
-    
-
-if __name__ == "__main__":
-    main()
+    def on_key_press(self, key, _modifiers):
+        if key == arcade.key.ESCAPE:
+            menu = self.previous_window
+            self.window.show_view(menu)
