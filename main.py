@@ -4,6 +4,7 @@ from Containers.Credit import CreditView
 from Containers.MainMenu import MenuView
 from Containers.Tutorial import TutorialView
 
+
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 SCREEN_TITLE = "Algorithm Adventure"
