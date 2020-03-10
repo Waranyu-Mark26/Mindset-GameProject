@@ -1,5 +1,4 @@
 import arcade
-import time
 from Containers.Credit import CreditView
 from Containers.MainMenu import MenuView
 from Containers.Tutorial import TutorialView
@@ -14,7 +13,7 @@ def main():
     # window = MyGame(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_TITLE)
     menu_view = MenuView()
     window.show_view(menu_view)
-      
+
     arcade.run()
 
 if __name__ == "__main__":

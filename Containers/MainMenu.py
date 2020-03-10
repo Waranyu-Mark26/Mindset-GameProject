@@ -2,6 +2,7 @@ from arcade.gui import *
 from Containers.StageSelection import Stageview
 from Containers.Tutorial import TutorialView
 from Containers.Credit import CreditView
+from Containers.Game import GameView
 import arcade
 import globalvars as var
 
@@ -89,7 +90,8 @@ class MenuView(arcade.View):
         
         if view_state_change == 1:
             stage = Stageview(self)
-            self.window.show_view(stage)
+            game = GameView()
+            self.window.show_view(game)
         elif view_state_change == 2:
             tutorial = TutorialView(self)
             self.window.show_view(tutorial)
