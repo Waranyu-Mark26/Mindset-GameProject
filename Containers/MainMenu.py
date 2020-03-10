@@ -1,41 +1,48 @@
 from arcade.gui import *
-from Credit import CreditView
+from Containers.StageSelection import Stageview
+from Containers.Tutorial import TutorialView
+from Containers.Credit import CreditView
 import arcade
-# from Window import MyGame as window
 # import os, sys
 # sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# import main
-# main.change_view()
+
 WIDTH = 1280
 HEIGHT = 720
 
+view_state_change = 0
+# 0 : MainMenu
+# 1 : StageView
+# 2 : TutorialView
+# 3 : CreditView
+
 class Button(TextButton):
-    def __init__(self, x=0, y=0, width=100, height=100, text="", theme=None, view=None):
+    def __init__(self, x=0, y=0, width=100, height=100, text="", theme=None, view_state=None):
         super().__init__(x, y, width, height, text, theme=theme)
-        self.view = view
+        self.view_state = view_state
 
     def on_press(self):
         self.pressed = True
 
+    def on_mouse_hover(self):
+        self.hover = True
+
     def on_release(self):
         if self.pressed:
             self.pressed = False
-            print(self.view)
-            # change_view()
-            # window.show_view(CreditView())
-            if self.view != None:
-                pass
-                # main.menu_view.window.show_view(self.view)
+
+            print(self.view_state)
+            if self.view_state != None:
+                global view_state_change
+                view_state_change = self.view_state
 
 class MenuView(arcade.View):
-
+    
     def __init__(self):
         super().__init__()
         self.width = WIDTH
         self.height = HEIGHT
         self.background = arcade.load_texture("Resources/game-bg.jpg")
         
-
         # setup theme
         self.theme = Theme()
         self.theme.set_font(24, arcade.color.WHITE)
@@ -59,11 +66,11 @@ class MenuView(arcade.View):
 
     def set_buttons(self):
         self.set_button_textures('PlayButton/play-btn')
-        self.button_list.append(Button(self.width/2, self.height/2, 150, 150,theme=self.theme))
+        self.button_list.append(Button(self.width/2, self.height/2, 150, 150, theme=self.theme, view_state=1))
         self.set_button_textures('TutorialButton/tutorial-btn')
-        self.button_list.append(Button(self.width/2-35, self.height/2-110, 80, 80,theme=self.theme))
+        self.button_list.append(Button(self.width/2-35, self.height/2-110, 80, 80, theme=self.theme, view_state=2))
         self.set_button_textures('InformationButton/information-btn')
-        self.button_list.append(Button(self.width/2+35, self.height/2-110, 80, 80,theme=self.theme, view=CreditView()))
+        self.button_list.append(Button(self.width/2+35, self.height/2-110, 80, 80, theme=self.theme, view_state=3))
 
     def on_draw(self):
         arcade.start_render()
@@ -73,17 +80,23 @@ class MenuView(arcade.View):
                                             WIDTH*scale, HEIGHT*scale,
                                             self.background)
 
-        arcade.draw_text("MENU", start_x=self.width/2, start_y=self.height/2+150,
-                         color=arcade.color.DARK_BYZANTIUM, font_size=45, anchor_x="center", anchor_y="center", font_name='Arial')
+        # arcade.draw_text("MENU", start_x=self.width/2, start_y=self.height/2+120,
+        #                  color=arcade.color.DARK_BYZANTIUM, font_size=40, anchor_x="center", anchor_y="center", font_name='Arial', bold=True)
+
+        arcade.draw_text("Algorithm Adventure", start_x=self.width/2, start_y=self.height/2+140,
+                         color=arcade.color.DARK_RASPBERRY, font_size=50, anchor_x="center", anchor_y="center", font_name='Arial', bold=True)
+        
+        if view_state_change == 1:
+            self.window.show_view(Stageview())
+        elif view_state_change == 2:
+            self.window.show_view(TutorialView())
+        elif view_state_change == 3:
+            self.window.show_view(CreditView())
+
         super().on_draw()
 
-    
     def on_key_press(self, key, _modifiers):
         if key == arcade.key.ESCAPE:
             credit = CreditView()
             self.window.show_view(credit)
-
-    def change_view(self):
-        print('hello')
-        credit = CreditView()
-        self.window.show_view(credit)
+        
