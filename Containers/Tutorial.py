@@ -1,8 +1,8 @@
 import arcade
-# import globalvars as var
+import globalvars as var
 
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = var.SCREEN_WIDTH
+HEIGHT = var.SCREEN_HEIGHT
 
 class TutorialView(arcade.View):
     

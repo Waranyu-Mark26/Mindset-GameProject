@@ -1,9 +1,10 @@
 from arcade.gui import *
 import arcade
+import globalvars as var
 # from Containers.MainMenu import MenuView
 
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = var.SCREEN_WIDTH
+HEIGHT = var.SCREEN_HEIGHT
 
 class StageButton(TextButton):
 

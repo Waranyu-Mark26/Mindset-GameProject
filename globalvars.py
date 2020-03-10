@@ -1,3 +1,2 @@
-from Containers.MainMenu import MenuView
-
-menu_view = MenuView()
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720

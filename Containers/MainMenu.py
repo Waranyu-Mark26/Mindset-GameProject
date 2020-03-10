@@ -3,9 +3,10 @@ from Containers.StageSelection import Stageview
 from Containers.Tutorial import TutorialView
 from Containers.Credit import CreditView
 import arcade
+import globalvars as var
 
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = var.SCREEN_WIDTH
+HEIGHT = var.SCREEN_HEIGHT
 
 view_state_change = 0
 # 0 : MainMenu
