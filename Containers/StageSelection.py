@@ -35,10 +35,10 @@ class Stageview(arcade.View):
         self.previous_window = previous_window
     
     def set_button_textures(self):
-        normal = "Resources/StageSelectionButton/StageButton.png"
-        hover = "Resources/StageSelectionButton/StageButton.png"
-        clicked = "Resources/StageSelectionButton/StageButton.png"
-        locked = "Resources/StageSelectionButton/StageButton.png"
+        normal = "Resources/StageSelectionButton/stage-btn-normal.png"
+        hover = "Resources/StageSelectionButton/stage-btn-hover.png"
+        clicked = "Resources/StageSelectionButton/stage-btn-clicked.png"
+        locked = "Resources/StageSelectionButton/stage-btn-locked.png"
         self.theme.add_button_textures(normal, hover, clicked, locked)
 
     def set_buttons(self):
@@ -61,3 +61,8 @@ class Stageview(arcade.View):
         if key == arcade.key.ESCAPE:
             menu = self.previous_window
             self.window.show_view(menu)
+
+
+    
+
+            
