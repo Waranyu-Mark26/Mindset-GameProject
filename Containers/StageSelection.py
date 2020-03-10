@@ -7,7 +7,7 @@ HEIGHT = 720
 
 class StageButton(TextButton):
 
-    def __init__(self, x=0, y=0, width=200, height=50, text="Stage 1", theme=None,view=None):
+    def __init__(self, x=0, y=0, width=180, height=180, text="1", theme=None,view=None):
         super().__init__(x, y, width, height, text, theme=theme)
         self.view = view
 
@@ -25,25 +25,27 @@ class Stageview(arcade.View):
 
     def __init__(self):
         super().__init__()
-        self.background = arcade.load_texture("Resources/View2.png")
+        self.background = arcade.load_texture("Resources/View 4.jpg")
 
         self.theme = Theme()
-        self.theme.set_font(24, arcade.color.DARK_SPRING_GREEN)
+        self.theme.set_font(55, arcade.color.WHITE,font_name=('Calibri'))
 
         self.set_buttons()
     
     def set_button_textures(self):
-        normal = ":resources:gui_themes/Fantasy/Buttons/Normal.png"
-        hover = ":resources:gui_themes/Fantasy/Buttons/Hover.png"
-        clicked = ":resources:gui_themes/Fantasy/Buttons/Clicked.png"
-        locked = ":resources:gui_themes/Fantasy/Buttons/Locked.png"
+        normal = "Resources/StageSelectionButton/StageButton.png"
+        hover = "Resources/StageSelectionButton/StageButton.png"
+        clicked = "Resources/StageSelectionButton/StageButton.png"
+        locked = "Resources/StageSelectionButton/StageButton.png"
         self.theme.add_button_textures(normal, hover, clicked, locked)
 
     def set_buttons(self):
         self.set_button_textures()
-        self.button_list.append(StageButton(640, 360, theme=self.theme))
-        self.button_list.append(StageButton(640, 270,text = 'Stage 2' ,theme=self.theme))
-        self.button_list.append(StageButton(640, 180,text = 'Stage 3', theme=self.theme))
+        self.button_list.append(StageButton(120, 360, theme=self.theme))
+        self.button_list.append(StageButton(320, 360,text = '2' ,theme=self.theme))
+        self.button_list.append(StageButton(520, 360,text = '3', theme=self.theme))
+        self.button_list.append(StageButton(720, 360,text = '4', theme=self.theme))
+        self.button_list.append(StageButton(920, 360,text = '5', theme=self.theme))
 
     def on_draw(self):
         arcade.start_render()
@@ -52,6 +54,8 @@ class Stageview(arcade.View):
 
     def on_show(self):
         arcade.set_background_color(arcade.color.WHITE)
+
+'''Test'''
     
 def main():
     window = arcade.Window(WIDTH, HEIGHT, "Algorithm Adventure", resizable=False, fullscreen=False)
