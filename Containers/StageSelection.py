@@ -43,11 +43,11 @@ class Stageview(arcade.View):
 
     def set_buttons(self):
         self.set_button_textures()
-        self.button_list.append(StageButton(120, 360, theme=self.theme))
-        self.button_list.append(StageButton(320, 360,text = '2' ,theme=self.theme))
-        self.button_list.append(StageButton(520, 360,text = '3', theme=self.theme))
-        self.button_list.append(StageButton(720, 360,text = '4', theme=self.theme))
-        self.button_list.append(StageButton(920, 360,text = '5', theme=self.theme))
+        self.button_list.append(StageButton(240, 360, theme=self.theme))
+        self.button_list.append(StageButton(440, 360,text = '2' ,theme=self.theme))
+        self.button_list.append(StageButton(640, 360,text = '3', theme=self.theme))
+        self.button_list.append(StageButton(840, 360,text = '4', theme=self.theme))
+        self.button_list.append(StageButton(1040, 360,text = '5', theme=self.theme))
 
     def on_draw(self):
         arcade.start_render()
