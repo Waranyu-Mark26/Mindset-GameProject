@@ -12,6 +12,7 @@ class TutorialView(arcade.View):
         self.height = HEIGHT
 
         self.background = arcade.load_texture("Resources/tutorial.png")
+        self.previous_window = previous_window
 
     def on_show(self):
         arcade.set_background_color(arcade.color.TOPAZ)
