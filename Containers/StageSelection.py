@@ -35,19 +35,19 @@ class Stageview(arcade.View):
         self.previous_window = previous_window
     
     def set_button_textures(self):
-        normal = "Resources/StageSelectionButton/StageButton.png"
-        hover = "Resources/StageSelectionButton/StageButton.png"
-        clicked = "Resources/StageSelectionButton/StageButton.png"
-        locked = "Resources/StageSelectionButton/StageButton.png"
+        normal = "Resources/StageSelectionButton/stage-btn-normal.png"
+        hover = "Resources/StageSelectionButton/stage-btn-hover.png"
+        clicked = "Resources/StageSelectionButton/stage-btn-clicked.png"
+        locked = "Resources/StageSelectionButton/stage-btn-locked.png"
         self.theme.add_button_textures(normal, hover, clicked, locked)
 
     def set_buttons(self):
         self.set_button_textures()
-        self.button_list.append(StageButton(120, 360, theme=self.theme))
-        self.button_list.append(StageButton(320, 360,text = '2' ,theme=self.theme))
-        self.button_list.append(StageButton(520, 360,text = '3', theme=self.theme))
-        self.button_list.append(StageButton(720, 360,text = '4', theme=self.theme))
-        self.button_list.append(StageButton(920, 360,text = '5', theme=self.theme))
+        self.button_list.append(StageButton(240, 360, theme=self.theme))
+        self.button_list.append(StageButton(440, 360,text = '2' ,theme=self.theme))
+        self.button_list.append(StageButton(640, 360,text = '3', theme=self.theme))
+        self.button_list.append(StageButton(840, 360,text = '4', theme=self.theme))
+        self.button_list.append(StageButton(1040, 360,text = '5', theme=self.theme))
 
     def on_draw(self):
         arcade.start_render()
@@ -61,3 +61,8 @@ class Stageview(arcade.View):
         if key == arcade.key.ESCAPE:
             menu = self.previous_window
             self.window.show_view(menu)
+
+
+    
+
+            
