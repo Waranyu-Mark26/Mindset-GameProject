@@ -1,4 +1,5 @@
 import arcade
+from Components.GameCommand import GameCommandPanel
 import globalvars as var
 
 WIDTH = var.SCREEN_WIDTH
@@ -11,6 +12,11 @@ class GameView(arcade.View):
         self.background = arcade.load_texture("Resources/game-bg2.jpg")
         # If you have sprite lists, you should create them here,
         # and set them to None
+        
+
+    def on_show(self):
+        pass
+        # self.window.show_view(GameCommandPanel())
 
     def setup(self):
         # Create your sprites and sprite lists here
@@ -26,6 +32,31 @@ class GameView(arcade.View):
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
         arcade.draw_lrwh_rectangle_textured(0, 0, WIDTH, HEIGHT, self.background)
+
+        start_y = 0
+        start_x = 0
+        width = 1000
+        height = 100
+        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           start_y + height, start_y,
+                                           arcade.color.WHITE, 1)
+        
+        start_y = 100
+        start_x = 0
+        width = 1000
+        height = 620
+        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           start_y + height, start_y,
+                                           arcade.color.WHITE, 1)
+        
+        start_y = 0
+        start_x = 1000
+        width = 280
+        height = 200
+        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           start_y + height, start_y,
+                                           arcade.color.WHITE, 1)
+
         super().on_draw()
         # Call draw() on all your sprite lists below
 
