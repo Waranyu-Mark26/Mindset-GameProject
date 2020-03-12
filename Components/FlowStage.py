@@ -1,57 +1,76 @@
 import arcade
+from arcade.gui import *
 
 WIDTH = 1280
 HEIGHT = 720
-
+Decrese = 150
 
 
 class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
-        
-        self.press1 = arcade.load_texture("Resources/Arrow/Arrow-up.png")
-        self.press2 = arcade.load_texture("Resources/Arrow/Arrow-turn left.png")
-        self.press3 = arcade.load_texture("Resources/Arrow/Arrow-turn right.png")
+        arcade.set_background_color(arcade.color.TOPAZ)
+        self.list_output = None
         self.PressUp = False
         self.PressLeft = False
         self.PressRight = False
         self.PressEnd = False
-        self.move_x = 100
-        self.move_y = 500
-        self.array = []
+        self.list_output = arcade.SpriteList()
+        self.Move_x = 100
+        self.Move_y = 500
 
-    def on_show(self):
-        arcade.set_background_color(arcade.color.TOPAZ)
-
+#    def setup(self):
+#      self.list_output = arcade.SpriteList()
+#       for y in range(500,40,-150):
+#           for x in range(100,1010,150):
+#               if self.PressUp:
+#                    Button = arcade.Sprite("Resources/Arrow/Arrow-up.png",image_width=100,image_height=100,center_x=x,center_y=y)
+#                    self.list_output.append(Button)
+#                    self.PressUp = False
+#                if self.PressLeft:
+#                    Button = arcade.Sprite("Resources/Arrow/Arrow-turn left.png",image_width=100,image_height=100,center_x=x,center_y=y)
+#                    self.list_output.append(Button)
+#                    self.PressLeft = False
+#                if self.PressRight:
+#                    Button = arcade.Sprite("Resources/Arrow/Arrow-turn right.png",image_width=100,image_height=100,center_x=x,center_y=y)
+#                    self.list_output.append(Button)
+#                    self.PressRight = False
     def on_draw(self):
         arcade.start_render()
-        
-        arcade.draw_text("Plese Press 1 or 2 or 3",WIDTH/2,650,arcade.color.BLACK,24)
+        self.list_output.draw()
         super().on_draw()
+
+    def on_update(self, delta_time):
         if self.PressUp:
-            arcade.draw_lrwh_rectangle_textured(self.move_x,self.move_y,100,100,self.press1)
-            if self.move_x == 1000:
-                self.move_y -= 150
-                self.move_x = 100
+            Button = arcade.Sprite("Resources/Arrow/Arrow-up.png",scale = 0.5,center_x=self.Move_x,center_y=self.Move_y)
+            self.list_output.append(Button)
+            if self.Move_x == 1000:
+                self.Move_y -= Decrese
+                self.Move_x = 100
             else:
-                self.move_x += 150
-  #          self.PressUp = False
+                self.Move_x += Decrese
+            self.PressUp = False
+
         if self.PressLeft:
-            arcade.draw_lrwh_rectangle_textured(self.move_x,self.move_y,100,100,self.press2)
-            if self.move_x == 1000:
-                self.move_y -= 150
-                self.move_x = 100
+            Button = arcade.Sprite("Resources/Arrow/Arrow-turn left.png",scale =0.5,center_x=self.Move_x,center_y=self.Move_y)
+            self.list_output.append(Button)
+            if self.Move_x == 1000:
+                self.Move_y -= Decrese
+                self.Move_x = 100
             else:
-                self.move_x += 150
- #           self.PressLeft = False
+                self.Move_x += Decrese
+            self.PressLeft = False
+
         if self.PressRight:
-            arcade.draw_lrwh_rectangle_textured(self.move_x,self.move_y,100,100,self.press3)
-            if self.move_x == 1000:
-                self.move_y -= 150
-                self.move_x = 100
+            Button = arcade.Sprite("Resources/Arrow/Arrow-turn right.png",scale =0.5,center_x=self.Move_x,center_y=self.Move_y)
+            self.list_output.append(Button)
+            if self.Move_x == 1000:
+                self.Move_y -= Decrese
+                self.Move_x = 100
             else:
-                self.move_x += 150
-                
+                self.Move_x += Decrese
+            self.PressRight = False
+        self.list_output.update()
 
     def on_key_press(self,key, _modifiers):
         if key == arcade.key.NUM_1:
@@ -59,11 +78,7 @@ class MenuView(arcade.View):
         if key == arcade.key.NUM_2:
             self.PressLeft = True
         if key == arcade.key.NUM_3:
-            self.PressRight = True   
-        if key == arcade.key.ENTER:
-            pass
-
-
+            self.PressRight = True  
 
 
 def main():
