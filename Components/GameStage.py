@@ -10,9 +10,10 @@ class CreateStage():
     def CheckStage(self,stage=1):
         if stage == 1:
             self.stage_list = [[0,0,0,0,0,0,0,0],[0,0,1,1,1,1,0,0],[0,0,1,0,0,1,1,2],[1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
-        if stage == 2:
+        elif stage == 2:
             self.stage_list = [[0,0,0,0,0,0,0,0],[1,1,1,3,1,1,1,2],[0,1,0,0,1,0,0,0],[0,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0]]
-        #return CreateStage(self.stage_list)
+        elif stage == 3:
+            self.stage_list = [[1,0,1,1,1,0,0,0],[1,0,1,0,1,0,1,2],[1,0,1,0,1,0,1,0],[1,0,1,0,1,0,1,0],[1,1,1,0,1,1,1,0]]
     
 '''เทสเฉยๆ
     def GoStage(self):
@@ -68,7 +69,7 @@ class GameStageView(arcade.View):
 
 def main():
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
-    menu_view = GameStageView(1)
+    menu_view = GameStageView(3)
     window.show_view(menu_view)
       
     arcade.run()
