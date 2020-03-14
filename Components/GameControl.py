@@ -36,10 +36,7 @@ class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
         arcade.set_background_color(arcade.color.PINK)
-        self.list_output = None
 
-        self.Move_x = 1020
-        self.Move_y = 570
         self.Play = Theme()
         self.Stop = Theme()
         self.setup()
@@ -69,14 +66,12 @@ class MenuView(arcade.View):
         super().on_draw()
     
     def set_buttons(self):
-        self.button_list.append(PlayButton(self, 950, 70,150,100,theme=self.Play))
-        self.button_list.append(StopButton(self, 1150, 70,150,100 ,theme=self.Stop))
+        self.button_list.append(PlayButton(self, 950, 70, 150, 150,theme=self.Play))
+        self.button_list.append(StopButton(self, 1150, 70, 150, 150 ,theme=self.Stop))
     
     def setup(self):
         self.setup_theme()
         self.set_buttons()
-
-
 
 
 def main():

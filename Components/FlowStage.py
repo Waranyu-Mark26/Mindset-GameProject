@@ -65,6 +65,7 @@ class MenuView(arcade.View):
         self.turnright = Theme()
         self.List = []
         self.setup()
+
     def set_button_texturesforward(self):
         normal = "Resources/Arrow/Arrow-up-normal.png"
         hover = "Resources/Arrow/Arrow-up-hover.png"
@@ -79,14 +80,12 @@ class MenuView(arcade.View):
         locked = "Resources/Arrow/Arrow-turn left-locked.png"
         self.turnleft.add_button_textures(normal, hover, clicked, locked)
         
-
     def set_button_texturesturnright(self):
         normal = "Resources/Arrow/Arrow-turn right-normal.png"
         hover = "Resources/Arrow/Arrow-turn right-hover.png"
         clicked = "Resources/Arrow/Arrow-turn right-clicked.png"
         locked = "Resources/Arrow/Arrow-turn right-locked.png"
         self.turnright.add_button_textures(normal, hover, clicked, locked)
-
 
     def setup_theme(self):
         self.forward.set_font(24, arcade.color.WHITE)
@@ -115,7 +114,6 @@ class MenuView(arcade.View):
 
     def on_update(self, delta_time):
         if self.PressUp:
-            Button = arcade.Sprite("Resources/Arrow/Arrow-up.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             Button = arcade.Sprite("Resources/Arrow/Arrow-up-normal.png",scale = 0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(1)
@@ -127,7 +125,6 @@ class MenuView(arcade.View):
             self.PressUp = False
 
         if self.PressLeft:
-            Button = arcade.Sprite("Resources/Arrow/Arrow-turn left.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn left-normal.png",scale =0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(2)
@@ -139,7 +136,6 @@ class MenuView(arcade.View):
             self.PressLeft = False
 
         if self.PressRight:
-            Button = arcade.Sprite("Resources/Arrow/Arrow-turn right.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn right-normal.png",scale =0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(3)

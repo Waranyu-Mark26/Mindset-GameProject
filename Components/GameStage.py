@@ -34,24 +34,24 @@ class GameStageView(arcade.View):
         self.background = arcade.load_texture("Resources/game-bg2.jpg")
         CreateStageClass = CreateStage()
         CreateStageClass.CheckStage(x)
-        IM_STAGE = CreateStageClass.stage_list
+        self.IM_STAGE = CreateStageClass.stage_list
         self.block_list = arcade.SpriteList()
-        self.setup(IM_STAGE)
+        self.setup()
 
-    def setup(self,ST):
+    def setup(self):
         self.block_list = arcade.SpriteList()
-        for y in range(0,len(ST)):
-            for x in range(0,len(ST[y])):
-                if ST[y][x] == 1:
+        for y in range(0,len(self.IM_STAGE)):
+            for x in range(0,len(self.IM_STAGE[y])):
+                if self.IM_STAGE[y][x] == 1:
                     #print(62.5+(x*125),720-((y+1)*62))
                     Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
                     self.block_list.append(Dirt)
-                elif ST[y][x] == 2:
+                elif self.IM_STAGE[y][x] == 2:
                     Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
                     self.block_list.append(Dirt)
                     Flag = arcade.Sprite(":resources:images/items/flagYellow1.png",scale=0.65,center_x=62.5+(x*125)+35,center_y=658-(y*124)+60)
                     self.block_list.append(Flag)
-                elif ST[y][x] == 3:
+                elif self.IM_STAGE[y][x] == 3:
                     Lava = arcade.Sprite(":resources:images/tiles/lava.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
                     self.block_list.append(Lava)
                 
@@ -69,8 +69,8 @@ class GameStageView(arcade.View):
 
 def main():
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
-    menu_view = GameStageView(3)
-    window.show_view(menu_view)
+    game_view = GameStageView(3)
+    window.show_view(game_view)
       
     arcade.run()
 
