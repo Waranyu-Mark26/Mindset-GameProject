@@ -10,6 +10,8 @@ class CreateStage():
     def CheckStage(self,stage=1):
         if stage == 1:
             self.stage_list = [[0,0,0,0,0,0,0,0],[0,0,1,1,1,1,0,0],[0,0,1,0,0,1,1,2],[1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
+        if stage == 2:
+            self.stage_list = [[0,0,0,0,0,0,0,0],[1,1,1,3,1,1,1,2],[0,1,0,0,1,0,0,0],[0,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0]]
         #return CreateStage(self.stage_list)
     
 '''เทสเฉยๆ
@@ -23,34 +25,41 @@ class CreateStage():
         '''
 
 #Test
-class TestView(arcade.View):
-    def __init__(self):
+class GameStageView(arcade.View):
+    def __init__(self,x):
         super().__init__()
+        self.block_list = None
+        self.flag_list = None
         self.background = arcade.load_texture("Resources/game-bg2.jpg")
-        #self.Dirt = arcade.Sprite("Resources/HomeButton/home-btn-clicked.png",scale=0.13,center_x=62.5,center_y=658)
-        #self.Dirt2 = arcade.Sprite("Resources/HomeButton/home-btn-clicked.png",scale=0.13,center_x=937.5,center_y=658)
-        #self.Dirt3 = arcade.Sprite("Resources/HomeButton/home-btn-clicked.png",scale=0.13,center_x=62.5,center_y=162)
-        #self.Dirt4 = arcade.Sprite("Resources/HomeButton/home-btn-clicked.png",scale=0.13,center_x=937.5,center_y=162)
+        CreateStageClass = CreateStage()
+        CreateStageClass.CheckStage(x)
+        IM_STAGE = CreateStageClass.stage_list
+        self.block_list = arcade.SpriteList()
+        self.setup(IM_STAGE)
+
+    def setup(self,ST):
+        self.block_list = arcade.SpriteList()
+        for y in range(0,len(ST)):
+            for x in range(0,len(ST[y])):
+                if ST[y][x] == 1:
+                    #print(62.5+(x*125),720-((y+1)*62))
+                    Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
+                    self.block_list.append(Dirt)
+                elif ST[y][x] == 2:
+                    Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
+                    self.block_list.append(Dirt)
+                    Flag = arcade.Sprite(":resources:images/items/flagYellow1.png",scale=0.65,center_x=62.5+(x*125)+35,center_y=658-(y*124)+60)
+                    self.block_list.append(Flag)
+                elif ST[y][x] == 3:
+                    Lava = arcade.Sprite(":resources:images/tiles/lava.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
+                    self.block_list.append(Lava)
+                
+
 
     def on_draw(self):
-        CreateStageClass = CreateStage()
-        CreateStageClass.CheckStage(1)
-        IM_STAGE = CreateStageClass.stage_list
         arcade.start_render()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH,SCREEN_HEIGHT,self.background)
-        for i in range(0,len(IM_STAGE)):
-            for j in range(0,len(IM_STAGE[i])):
-                if IM_STAGE[i][j] == 1:
-                    #print(62.5+(j*125),720-((i+1)*62))
-                    self.Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(j*125),center_y=658-(i*124))
-                elif IM_STAGE[i][j] == 2:
-                    self.Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(j*125),center_y=658-(i*124))
-                    self.Flag = arcade.Sprite(":resources:images/items/flagYellow1.png",scale=0.65,center_x=62.5+(j*125)+35,center_y=658-(i*124)+60)
-                if IM_STAGE[i][j] != 0:
-                    self.Dirt.draw()
-                    if IM_STAGE[i][j] == 2:
-                        self.Flag.draw()
-            
+        self.block_list.draw()    
     
         super().on_draw()
 
@@ -59,7 +68,7 @@ class TestView(arcade.View):
 
 def main():
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
-    menu_view = TestView()
+    menu_view = GameStageView(1)
     window.show_view(menu_view)
       
     arcade.run()
