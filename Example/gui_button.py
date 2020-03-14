@@ -57,7 +57,6 @@ class MyGame(arcade.Window):
         clicked = ":resources:gui_themes/Fantasy/Buttons/Clicked.png"
         locked = ":resources:gui_themes/Fantasy/Buttons/Locked.png"
         self.theme.add_button_textures(normal, hover, clicked, locked)
-
     def setup_theme(self):
         self.theme = Theme()
         self.theme.set_font(24, arcade.color.WHITE)
