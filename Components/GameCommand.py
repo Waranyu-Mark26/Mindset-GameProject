@@ -15,13 +15,15 @@ class Button(TextButton):
     def on_release(self):
         if self.pressed:
             self.pressed = False
+            print('Something')
 
-class GameCommandPanel(arcade.View):
+class GameCommandPanel():
     def __init__(self):
         super().__init__()
         self.theme = Theme()
-        self.width = 1280
-        self.height = 720
+        self.width = WIDTH
+        self.height = HEIGHT
+        self.button_list = []
         arcade.set_background_color = arcade.color.WILD_ORCHID
     
     def set_button_textures(self, dir):
@@ -32,9 +34,8 @@ class GameCommandPanel(arcade.View):
         self.theme.add_button_textures(normal, hover, clicked, locked)
 
     def set_buttons(self):
-        self.set_button_textures('PlayButton/play-btn')
-        self.button_list.append(Button(self.width/2, self.height/2, 150, 150, theme=self.theme, view_state=1))
         self.set_button_textures('TutorialButton/tutorial-btn')
         self.button_list.append(Button(self.width/2-35, self.height/2-110, 80, 80, theme=self.theme, view_state=2))
         self.set_button_textures('InformationButton/information-btn')
         self.button_list.append(Button(self.width/2+35, self.height/2-110, 80, 80, theme=self.theme, view_state=3))
+

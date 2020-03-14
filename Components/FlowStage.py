@@ -3,11 +3,13 @@ from arcade.gui import *
 
 WIDTH = 1280
 HEIGHT = 720
-Decrese = 100
-Increase = 60
+space_y = 60
+space_X = 60
+start_x = 1020
+start_y = 570
 
 class forwardButton(TextButton):
-    def __init__(self, game, x=0, y=0, width=100, height=40, text="", theme=None):
+    def __init__(self, game, x=0, y=0, width=50, height=50, text="", theme=None):
         super().__init__(x, y, width, height, text, theme=theme)
         self.game = game
 
@@ -20,7 +22,7 @@ class forwardButton(TextButton):
             self.pressed = False
 
 class turnleftButton(TextButton):
-    def __init__(self, game, x=0, y=0, width=100, height=40, text="", theme=None):
+    def __init__(self, game, x=0, y=0, width=50, height=50, text="", theme=None):
         super().__init__(x, y, width, height, text, theme=theme)
         self.game = game
 
@@ -33,7 +35,7 @@ class turnleftButton(TextButton):
             self.pressed = False
 
 class turnrightButton(TextButton):
-    def __init__(self, game, x=0, y=0, width=100, height=40, text="", theme=None):
+    def __init__(self, game, x=0, y=0, width=50, height=50, text="", theme=None):
         super().__init__(x, y, width, height, text, theme=theme)
         self.game = game
 
@@ -43,7 +45,6 @@ class turnrightButton(TextButton):
         if self.pressed:
             self.game.PressRight = True
             self.pressed = False
-
 
 
 class MenuView(arcade.View):
@@ -57,8 +58,8 @@ class MenuView(arcade.View):
         self.PressRight = False
         self.PressEnd = False
         self.list_output = arcade.SpriteList()
-        self.Move_x = 1020
-        self.Move_y = 570
+        self.Move_x = start_x
+        self.Move_y = start_y
         self.forward = Theme()
         self.turnleft = Theme()
         self.turnright = Theme()
@@ -102,10 +103,11 @@ class MenuView(arcade.View):
         arcade.draw_lines([(30,120),(980,120)],arcade.color.RED)
         self.list_output.draw()
         super().on_draw()
+
     def set_buttons(self):
-        self.button_list.append(forwardButton(self, 150, 70,150,100,theme=self.forward))
-        self.button_list.append(turnleftButton(self, 350, 70,150,100 ,theme=self.turnleft))
-        self.button_list.append(turnrightButton(self, 550, 70,150,100, theme=self.turnright))
+        self.button_list.append(forwardButton(self, 150, 70,150,150,theme=self.forward))
+        self.button_list.append(turnleftButton(self, 350, 70,150,150 ,theme=self.turnleft))
+        self.button_list.append(turnrightButton(self, 550, 70,150,150, theme=self.turnright))
 
     def setup(self):
         self.setup_theme()
@@ -113,36 +115,36 @@ class MenuView(arcade.View):
 
     def on_update(self, delta_time):
         if self.PressUp:
-            Button = arcade.Sprite("Resources/Arrow/Arrow-up.png",scale = 0.25,center_x=self.Move_x,center_y=self.Move_y)
+            Button = arcade.Sprite("Resources/Arrow/Arrow-up.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(1)
             if self.Move_x == 1200:
-                self.Move_y -= Decrese
-                self.Move_x = 1020
+                self.Move_y -= space_y
+                self.Move_x = start_x
             else:
-                self.Move_x += Increase
+                self.Move_x += space_X
             self.PressUp = False
 
         if self.PressLeft:
-            Button = arcade.Sprite("Resources/Arrow/Arrow-turn left.png",scale =0.25,center_x=self.Move_x,center_y=self.Move_y)
+            Button = arcade.Sprite("Resources/Arrow/Arrow-turn left.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(2)
             if self.Move_x == 1200:
-                self.Move_y -= Decrese
-                self.Move_x = 1020
+                self.Move_y -= space_y
+                self.Move_x = start_x
             else:
-                self.Move_x += Increase
+                self.Move_x += space_X
             self.PressLeft = False
 
         if self.PressRight:
-            Button = arcade.Sprite("Resources/Arrow/Arrow-turn right.png",scale =0.25,center_x=self.Move_x,center_y=self.Move_y)
+            Button = arcade.Sprite("Resources/Arrow/Arrow-turn right.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(3)
             if self.Move_x == 1200:
-                self.Move_y -= Decrese
+                self.Move_y -= space_y
                 self.Move_x = 1020
             else:
-                self.Move_x += Increase
+                self.Move_x += space_X
             self.PressRight = False
         self.list_output.update()
 
