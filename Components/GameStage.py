@@ -42,11 +42,15 @@ class TestView(arcade.View):
             for j in range(0,len(IM_STAGE[i])):
                 if IM_STAGE[i][j] == 1:
                     #print(62.5+(j*125),720-((i+1)*62))
-                    self.Dirt = arcade.Sprite("Resources/HomeButton/home-btn-locked.png",scale=0.13,center_x=62.5+(j*125),center_y=658-(i*124))
+                    self.Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(j*125),center_y=658-(i*124))
                 elif IM_STAGE[i][j] == 2:
-                    self.Dirt = arcade.Sprite("Resources/HomeButton/home-btn-hover.png",scale=0.13,center_x=62.5+(j*125),center_y=658-(i*124))
+                    self.Dirt = arcade.Sprite(":resources:images/tiles/stone.png",scale=0.65,center_x=62.5+(j*125),center_y=658-(i*124))
+                    self.Flag = arcade.Sprite(":resources:images/items/flagYellow1.png",scale=0.65,center_x=62.5+(j*125)+35,center_y=658-(i*124)+60)
                 if IM_STAGE[i][j] != 0:
                     self.Dirt.draw()
+                    if IM_STAGE[i][j] == 2:
+                        self.Flag.draw()
+            
     
         super().on_draw()
 
