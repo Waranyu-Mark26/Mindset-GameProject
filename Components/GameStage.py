@@ -36,9 +36,9 @@ class GameStageView(arcade.View):
         CreateStageClass.CheckStage(x)
         self.IM_STAGE = CreateStageClass.stage_list
         self.block_list = arcade.SpriteList()
-        self.setup()
+        self.setup(x)
 
-    def setup(self):
+    def setup(self,level):
         self.block_list = arcade.SpriteList()
         for y in range(0,len(self.IM_STAGE)):
             for x in range(0,len(self.IM_STAGE[y])):
@@ -54,6 +54,14 @@ class GameStageView(arcade.View):
                 elif self.IM_STAGE[y][x] == 3:
                     Lava = arcade.Sprite(":resources:images/tiles/lava.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
                     self.block_list.append(Lava)
+        if level == 1:
+            Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=306) #y +20 จากตรงกลาง
+        elif level == 2:
+            Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=554)
+        elif level == 3:
+            Character = arcade.Sprite("Resources/Animations/Front.png",scale=0.20,center_x=62.5,center_y=678)
+        self.block_list.append(Character)
+        
                 
 
 
@@ -69,7 +77,7 @@ class GameStageView(arcade.View):
 
 def main():
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
-    game_view = GameStageView(3)
+    game_view = GameStageView(2)
     window.show_view(game_view)
       
     arcade.run()
