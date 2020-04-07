@@ -1,17 +1,15 @@
 import arcade
-from Components.GameCommand import GameCommandPanel
-import globalvars as var
 from arcade.gui import *
 
-WIDTH = var.SCREEN_WIDTH
-HEIGHT = var.SCREEN_HEIGHT
+WIDTH = 1280
+HEIGHT = 720
 
 # Game Button
 space_y = 60
 space_X = 60
-start_x = 1020
+start_x = 1050
 start_y = 570
-max_x_panel = 1200
+max_x_panel = 1220
 
 class GameView(arcade.View):
     def __init__(self, level):
@@ -22,7 +20,6 @@ class GameView(arcade.View):
         # and set them to None
 
         # Flow Stage
-        self.list_output = None
         self.PressUp = False
         self.PressLeft = False
         self.PressRight = False
@@ -97,12 +94,14 @@ class GameView(arcade.View):
         self.set_button_texturesStop()
 
     def set_buttons(self):
+        # Game Command
         self.button_list.append(forwardButton(self,150,70,100,100,theme=self.forward))
-        self.button_list.append(turnleftButton(self,350,70,100,100,theme=self.turnleft))
-        self.button_list.append(turnrightButton(self,550,70,100,100,theme=self.turnright))
+        self.button_list.append(turnleftButton(self,300,70,100,100,theme=self.turnleft))
+        self.button_list.append(turnrightButton(self,450,70,100,100,theme=self.turnright))
 
-        self.button_list.append(PlayButton(self, 950, 70, 150, 150,theme=self.Play))
-        self.button_list.append(StopButton(self, 1150, 70, 150, 150 ,theme=self.Stop))
+        # Game Control
+        self.button_list.append(PlayButton(self, 1100, 80, 130, 130,theme=self.Play))
+        self.button_list.append(StopButton(self, 1210, 60, 80, 80,theme=self.Stop))
 
     def setup(self):
         # Create your sprites and sprite lists here
@@ -144,15 +143,15 @@ class GameView(arcade.View):
         start_y = 0
         start_x = 0
         width = 1000
-        height = 100
+        height = 120
         arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
                                            start_y + height, start_y,
                                            arcade.color.WHITE, 1)
         
-        start_y = 100
+        start_y = 120
         start_x = 0
         width = 1000
-        height = 620
+        height = 600
         arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
                                            start_y + height, start_y,
                                            arcade.color.WHITE, 1)
@@ -177,33 +176,33 @@ class GameView(arcade.View):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        if self.PressUp:
+        if self.PressUp and len(self.List) < 24:
             Button = arcade.Sprite("Resources/Arrow/Arrow-up-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(1)
-            if self.Move_x == max_x_panel:
+            if self.Move_x >= max_x_panel:
                 self.Move_y -= space_y
                 self.Move_x = start_x
             else:
                 self.Move_x += space_X
             self.PressUp = False
 
-        if self.PressLeft:
+        if self.PressLeft and len(self.List) < 24:
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn left-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(2)
-            if self.Move_x == max_x_panel:
+            if self.Move_x >= max_x_panel:
                 self.Move_y -= space_y
                 self.Move_x = start_x
             else:
                 self.Move_x += space_X
             self.PressLeft = False
 
-        if self.PressRight:
+        if self.PressRight and len(self.List) < 24:
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn right-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(3)
-            if self.Move_x == max_x_panel:
+            if self.Move_x >= max_x_panel:
                 self.Move_y -= space_y
                 self.Move_x = start_x
             else:
@@ -242,6 +241,11 @@ class StopButton(TextButton):
         self.game = game
 
     def on_press(self):
+        self.game.list_output = arcade.SpriteList()
+        self.game.List.clear()
+        self.game.Move_x = start_x
+        self.game.Move_y = start_y
+
         self.pressed = True
 
     def on_release(self):
@@ -286,3 +290,15 @@ class turnrightButton(TextButton):
         if self.pressed:
             self.game.PressRight = True
             self.pressed = False
+
+SCREEN_TITLE = "Algorithm Adventure"
+def main():
+    window = arcade.Window(WIDTH, HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
+
+    game = GameView(2)
+    window.show_view(game)
+
+    arcade.run()
+
+if __name__ == "__main__":
+    main()
