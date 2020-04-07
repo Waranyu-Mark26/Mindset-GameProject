@@ -45,7 +45,7 @@ class GameView(arcade.View):
         self.IM_STAGE = CreateStageClass.stage_list
         self.block_list = arcade.SpriteList()
 
-        self.setup()
+        self.setup(level)
 
     def set_button_texturesPlay(self):
         normal = "Resources/PlayButton/play-btn-normal.png"
@@ -103,7 +103,7 @@ class GameView(arcade.View):
         self.button_list.append(PlayButton(self, 1100, 80, 130, 130,theme=self.Play))
         self.button_list.append(StopButton(self, 1210, 60, 80, 80,theme=self.Stop))
 
-    def setup(self):
+    def setup(self,level):
         # Create your sprites and sprite lists here
         self.setup_theme()
         self.set_buttons()
@@ -123,6 +123,13 @@ class GameView(arcade.View):
                 elif self.IM_STAGE[y][x] == 3:
                     Lava = arcade.Sprite(":resources:images/tiles/lava.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
                     self.block_list.append(Lava)
+        if level == 1:
+            Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=306) #y +20 จากตรงกลาง
+        elif level == 2:
+            Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=554)
+        elif level == 3:
+            Character = arcade.Sprite("Resources/Animations/Front.png",scale=0.20,center_x=62.5,center_y=678)
+        self.block_list.append(Character)
 
     def on_draw(self):
         """
