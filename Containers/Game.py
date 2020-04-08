@@ -13,7 +13,7 @@ start_y = 670
 max_x_panel = 1220
 
 class GameView(arcade.View):
-    def __init__(self,previous_window2, level):
+    def __init__(self,previous_window, level):
         super().__init__()
         arcade.set_background_color(arcade.color.AMAZON)
         self.background = arcade.load_texture("Resources/game-bg2.jpg")
@@ -51,7 +51,7 @@ class GameView(arcade.View):
         self.block_list = arcade.SpriteList()
 
         self.setup(level)
-        self.previous_window_2 = previous_window2
+        self.previous_window = previous_window
 
     def set_button_texturesPlay(self):
         normal = "Resources/PlayButton/play-btn-normal.png"
@@ -146,7 +146,7 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, _modifiers):
         if key == arcade.key.ESCAPE:
-            self.menu = self.previous_window_2
+            self.menu = self.previous_window
             self.window.show_view(self.menu)
 
     def on_draw(self):
@@ -169,25 +169,25 @@ class GameView(arcade.View):
         start_x = 0
         width = 1000
         height = 120
-        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
-                                           start_y + height, start_y,
-                                           arcade.color.WHITE, 1)
+        #arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           #start_y + height, start_y,
+                                           #arcade.color.WHITE, 1)
         
         start_y = 120
         start_x = 0
         width = 1000
         height = 600
-        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
-                                           start_y + height, start_y,
-                                           arcade.color.WHITE, 1)
+        #arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           #start_y + height, start_y,
+                                           #arcade.color.WHITE, 1)
         
         start_y = 0
         start_x = 1000
         width = 280
         height = 200
-        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
-                                           start_y + height, start_y,
-                                           arcade.color.WHITE, 1)
+        #arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           #start_y + height, start_y,
+                                           #arcade.color.WHITE, 1)
 
         # Draw Game Stage
         self.block_list.draw()
@@ -202,7 +202,8 @@ class GameView(arcade.View):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        if self.PressUp and len(self.List) < 24:
+
+        if self.PressUp and len(self.List) < 32:
             Button = arcade.Sprite("Resources/Arrow/Arrow-up-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(1)
@@ -213,7 +214,7 @@ class GameView(arcade.View):
                 self.Move_x += space_X
             self.PressUp = False
 
-        if self.PressLeft and len(self.List) < 24:
+        if self.PressLeft and len(self.List) < 32:
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn left-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(2)
@@ -224,7 +225,7 @@ class GameView(arcade.View):
                 self.Move_x += space_X
             self.PressLeft = False
 
-        if self.PressRight and len(self.List) < 24:
+        if self.PressRight and len(self.List) < 32:
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn right-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(3)
@@ -268,28 +269,48 @@ class GameView(arcade.View):
                 
             #TurnLeft
             elif self.List[self.lenLi] == 2:
+                self.Character.remove_from_sprite_lists()
                 if self.dir_cha == 'Down':
+                    self.dirsprite = "Resources/Animations/Right.png"
                     self.dir_cha = 'Right'
-
                 elif self.dir_cha == 'Up':
+                    self.dirsprite = "Resources/Animations/Left.png"
                     self.dir_cha = 'Left'
                 elif self.dir_cha == 'Right':
+                    self.dirsprite = "Resources/Animations/Front.png"
                     self.dir_cha = 'Up'
                 elif self.dir_cha == 'Left':
+                    self.dirsprite = "Resources/Animations/Front.png"
                     self.dir_cha = 'Down'
+                self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
+                self.list_Character.append(self.Character)
                 self.lenLi += 1
 
             # TurnRight
             elif self.List[self.lenLi] == 3:
+                self.Character.remove_from_sprite_lists()
                 if self.dir_cha == 'Down':
+                    self.dirsprite = "Resources/Animations/Left.png"
                     self.dir_cha = 'Left'
                 elif self.dir_cha == 'Up':
+                    self.dirsprite = "Resources/Animations/Right.png"
                     self.dir_cha = 'Right'
                 elif self.dir_cha == 'Right':
+                    self.dirsprite = "Resources/Animations/Front.png"
                     self.dir_cha = 'Down'
                 elif self.dir_cha == 'Left':
+                    self.dirsprite = "Resources/Animations/Front.png"
                     self.dir_cha = 'Up'
+                self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
+                self.list_Character.append(self.Character)
                 self.lenLi += 1
+            
+            #checkBlock
+            #if self.IM_STAGE[self.c_y][self.c_x] != 1 and self.IM_STAGE[self.c_y][self.c_x] != 2:
+
+                    
+            #elif self.IM_STAGE[self.c_y][self.c_x] == 2:
+
             
 
         self.list_output.update()
