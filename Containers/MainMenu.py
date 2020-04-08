@@ -90,8 +90,8 @@ class MenuView(arcade.View):
         
         if view_state_change == 1:
             stage = Stageview(self)
-            game = GameView(1)
-            self.window.show_view(game)
+            #game = GameView(1)
+            self.window.show_view(stage)
         elif view_state_change == 2:
             tutorial = TutorialView(self)
             self.window.show_view(tutorial)

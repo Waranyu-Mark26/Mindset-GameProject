@@ -1,18 +1,19 @@
 import arcade
 from arcade.gui import *
+import globalvars as var
 
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = var.SCREEN_WIDTH
+HEIGHT = var.SCREEN_HEIGHT
 
 # Game Button
 space_y = 60
 space_X = 60
 start_x = 1050
-start_y = 570
+start_y = 670
 max_x_panel = 1220
 
 class GameView(arcade.View):
-    def __init__(self, level):
+    def __init__(self,previous_window, level):
         super().__init__()
         arcade.set_background_color(arcade.color.AMAZON)
         self.background = arcade.load_texture("Resources/game-bg2.jpg")
@@ -36,6 +37,10 @@ class GameView(arcade.View):
         self.Play = Theme()
         self.Stop = Theme()
 
+        #Play Control
+        self.Start = False
+        self.lenLi = 0
+
         # Game Stage
         self.block_list = None
         self.flag_list = None
@@ -46,6 +51,7 @@ class GameView(arcade.View):
         self.block_list = arcade.SpriteList()
 
         self.setup(level)
+        self.previous_window = previous_window
 
     def set_button_texturesPlay(self):
         normal = "Resources/PlayButton/play-btn-normal.png"
@@ -95,9 +101,9 @@ class GameView(arcade.View):
 
     def set_buttons(self):
         # Game Command
-        self.button_list.append(forwardButton(self,150,70,100,100,theme=self.forward))
-        self.button_list.append(turnleftButton(self,300,70,100,100,theme=self.turnleft))
-        self.button_list.append(turnrightButton(self,450,70,100,100,theme=self.turnright))
+        self.button_list.append(forwardButton(self,350,60,100,100,theme=self.forward))
+        self.button_list.append(turnleftButton(self,500,60,100,100,theme=self.turnleft))
+        self.button_list.append(turnrightButton(self,650,60,100,100,theme=self.turnright))
 
         # Game Control
         self.button_list.append(PlayButton(self, 1100, 80, 130, 130,theme=self.Play))
@@ -109,6 +115,7 @@ class GameView(arcade.View):
         self.set_buttons()
 
         self.block_list = arcade.SpriteList()
+        self.list_Character = arcade.SpriteList()
         for y in range(0,len(self.IM_STAGE)):
             for x in range(0,len(self.IM_STAGE[y])):
                 if self.IM_STAGE[y][x] == 1:
@@ -124,12 +131,23 @@ class GameView(arcade.View):
                     Lava = arcade.Sprite(":resources:images/tiles/lava.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
                     self.block_list.append(Lava)
         if level == 1:
-            Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=306) #y +20 จากตรงกลาง
+            self.Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=306) #y +20 จากตรงกลาง
+            self.c_x,self.c_y = 0,3
+            self.dir_cha = "Right"
         elif level == 2:
-            Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=554)
+            self.Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=554)
+            self.c_x,self.c_y = 0,1
+            self.dir_cha = "Right"
         elif level == 3:
-            Character = arcade.Sprite("Resources/Animations/Front.png",scale=0.20,center_x=62.5,center_y=678)
-        self.block_list.append(Character)
+            self.Character = arcade.Sprite("Resources/Animations/Front.png",scale=0.20,center_x=62.5,center_y=678)
+            self.c_x,self.c_y = 0,0
+            self.dir_cha = "Down"
+        self.list_Character.append(self.Character)
+
+    def on_key_press(self, key, _modifiers):
+        if key == arcade.key.ESCAPE:
+            self.menu = self.previous_window
+            self.window.show_view(self.menu)
 
     def on_draw(self):
         """
@@ -151,28 +169,29 @@ class GameView(arcade.View):
         start_x = 0
         width = 1000
         height = 120
-        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
-                                           start_y + height, start_y,
-                                           arcade.color.WHITE, 1)
+        #arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           #start_y + height, start_y,
+                                           #arcade.color.WHITE, 1)
         
         start_y = 120
         start_x = 0
         width = 1000
         height = 600
-        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
-                                           start_y + height, start_y,
-                                           arcade.color.WHITE, 1)
+        #arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           #start_y + height, start_y,
+                                           #arcade.color.WHITE, 1)
         
         start_y = 0
         start_x = 1000
         width = 280
         height = 200
-        arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
-                                           start_y + height, start_y,
-                                           arcade.color.WHITE, 1)
+        #arcade.draw_lrtb_rectangle_outline(start_x, start_x + width,
+                                           #start_y + height, start_y,
+                                           #arcade.color.WHITE, 1)
 
         # Draw Game Stage
         self.block_list.draw()
+        self.list_Character.draw()
 
         super().on_draw()
         # Call draw() on all your sprite lists below
@@ -183,7 +202,8 @@ class GameView(arcade.View):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        if self.PressUp and len(self.List) < 24:
+
+        if self.PressUp and len(self.List) < 32:
             Button = arcade.Sprite("Resources/Arrow/Arrow-up-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(1)
@@ -194,7 +214,7 @@ class GameView(arcade.View):
                 self.Move_x += space_X
             self.PressUp = False
 
-        if self.PressLeft and len(self.List) < 24:
+        if self.PressLeft and len(self.List) < 32:
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn left-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(2)
@@ -205,7 +225,7 @@ class GameView(arcade.View):
                 self.Move_x += space_X
             self.PressLeft = False
 
-        if self.PressRight and len(self.List) < 24:
+        if self.PressRight and len(self.List) < 32:
             Button = arcade.Sprite("Resources/Arrow/Arrow-turn right-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
             self.List.append(3)
@@ -215,8 +235,87 @@ class GameView(arcade.View):
             else:
                 self.Move_x += space_X
             self.PressRight = False
+        
+        if self.Start:
+            if self.lenLi >= len(self.List): self.Start = False
+
+            #GoAhead
+            elif self.List[self.lenLi] == 1:
+                if self.dir_cha == 'Down':
+                    self.Character.change_y = -6 #ตอนรูปนิ่ง animation อาจเปลี่ยนแปลงนะจ๊ะ
+                    if self.Character.center_y <= 678 - ((self.c_y+1)*124):
+                        self.Character.change_y = 0
+                        self.c_y += 1
+                        self.lenLi += 1
+                elif self.dir_cha == 'Up':
+                    self.Character.change_y = 6
+                    if self.Character.center_y >= 678 - ((self.c_y-1)*124):
+                        self.Character.change_y = 0
+                        self.c_y -= 1
+                        self.lenLi += 1
+                elif self.dir_cha == 'Right':
+                    self.Character.change_x = +5
+                    if self.Character.center_x >= 62.5 + ((self.c_x+1)*125): 
+                        self.Character.change_x = 0
+                        self.c_x += 1
+                        self.lenLi += 1
+                elif self.dir_cha == 'Left':
+                    self.c_x -= 1
+                    self.Character.change_x = -5
+                    if self.Character.center_x <= 62.5 + ((self.c_x-1)*125):
+                        self.Character.change_x = 0
+                        self.c_x -= 1
+                        self.lenLi += 1
+                
+            #TurnLeft
+            elif self.List[self.lenLi] == 2:
+                self.Character.remove_from_sprite_lists()
+                if self.dir_cha == 'Down':
+                    self.dirsprite = "Resources/Animations/Right.png"
+                    self.dir_cha = 'Right'
+                elif self.dir_cha == 'Up':
+                    self.dirsprite = "Resources/Animations/Left.png"
+                    self.dir_cha = 'Left'
+                elif self.dir_cha == 'Right':
+                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dir_cha = 'Up'
+                elif self.dir_cha == 'Left':
+                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dir_cha = 'Down'
+                self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
+                self.list_Character.append(self.Character)
+                self.lenLi += 1
+
+            # TurnRight
+            elif self.List[self.lenLi] == 3:
+                self.Character.remove_from_sprite_lists()
+                if self.dir_cha == 'Down':
+                    self.dirsprite = "Resources/Animations/Left.png"
+                    self.dir_cha = 'Left'
+                elif self.dir_cha == 'Up':
+                    self.dirsprite = "Resources/Animations/Right.png"
+                    self.dir_cha = 'Right'
+                elif self.dir_cha == 'Right':
+                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dir_cha = 'Down'
+                elif self.dir_cha == 'Left':
+                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dir_cha = 'Up'
+                self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
+                self.list_Character.append(self.Character)
+                self.lenLi += 1
+            
+            #checkBlock
+            #if self.IM_STAGE[self.c_y][self.c_x] != 1 and self.IM_STAGE[self.c_y][self.c_x] != 2:
+
+                    
+            #elif self.IM_STAGE[self.c_y][self.c_x] == 2:
+
+            
 
         self.list_output.update()
+        self.list_Character.update()
+
 
 class CreateStage():
     def __init__(self,stage_list = []):
@@ -240,6 +339,7 @@ class PlayButton(TextButton):
 
     def on_release(self):
         if self.pressed:
+            self.game.Start = True
             self.pressed = False
 
 class StopButton(TextButton):
@@ -299,13 +399,15 @@ class turnrightButton(TextButton):
             self.pressed = False
 
 SCREEN_TITLE = "Algorithm Adventure"
+'''
 def main():
     window = arcade.Window(WIDTH, HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
 
-    game = GameView(2)
+    game = GameView(3)
     window.show_view(game)
 
     arcade.run()
 
 if __name__ == "__main__":
     main()
+    '''
