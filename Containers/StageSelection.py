@@ -1,8 +1,7 @@
-from arcade.gui import *
-from Containers.Game import GameView
 import arcade
 import globalvars as var
-# from Containers.MainMenu import MenuView
+from Containers.Game import GameView
+from arcade.gui import *
 
 WIDTH = var.SCREEN_WIDTH
 HEIGHT = var.SCREEN_HEIGHT
@@ -21,7 +20,6 @@ class StageButton(TextButton):
     def on_release(self):
         if self.pressed:
             self.pressed = False
-            print(self.view)
             if self.view != None:
                 global view_state_change
                 view_state_change = self.view
@@ -57,7 +55,7 @@ class Stageview(arcade.View):
         arcade.start_render()
         arcade.draw_lrwh_rectangle_textured(0, 0,WIDTH,HEIGHT,self.background)
         if view_state_change != 0:
-            game = GameView(self,view_state_change)
+            game = GameView(self,view_state_change,self.previous_window)
             self.window.show_view(game)
         super().on_draw()
 

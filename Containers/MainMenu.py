@@ -2,7 +2,6 @@ from arcade.gui import *
 from Containers.StageSelection import Stageview
 from Containers.Tutorial import TutorialView
 from Containers.Credit import CreditView
-from Containers.Game import GameView
 import arcade
 import globalvars as var
 
@@ -86,7 +85,7 @@ class MenuView(arcade.View):
         #                  color=arcade.color.DARK_BYZANTIUM, font_size=40, anchor_x="center", anchor_y="center", font_name='Arial', bold=True)
 
         arcade.draw_text("Algorithm Adventure", start_x=self.width/2, start_y=self.height/2+140,
-                         color=arcade.color.DARK_RASPBERRY, font_size=50, anchor_x="center", anchor_y="center", font_name='Arial', bold=True)
+                         color=arcade.color.DARK_SCARLET, font_size=70, anchor_x="center", anchor_y="center", font_name='Arial', bold=True)
         
         if view_state_change == 1:
             stage = Stageview(self)

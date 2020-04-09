@@ -1,5 +1,6 @@
 import arcade
 from arcade.gui import *
+#from Containers.LoseOrWin import LoseOrWinView
 import globalvars as var
 
 WIDTH = var.SCREEN_WIDTH
@@ -13,7 +14,7 @@ start_y = 670
 max_x_panel = 1220
 
 class GameView(arcade.View):
-    def __init__(self,previous_window, level):
+    def __init__(self,previous_window, level,menu):
         super().__init__()
         arcade.set_background_color(arcade.color.AMAZON)
         self.background = arcade.load_texture("Resources/game-bg2.jpg")
@@ -49,7 +50,9 @@ class GameView(arcade.View):
         CreateStageClass.CheckStage(level)
         self.IM_STAGE = CreateStageClass.stage_list
         self.block_list = arcade.SpriteList()
-
+        
+        self.level = level
+        self.menu_view = menu
         self.setup(level)
         self.previous_window = previous_window
     
@@ -204,7 +207,6 @@ class GameView(arcade.View):
     def on_key_press(self, key, _modifiers):
         if key == arcade.key.ESCAPE:
             self.menu = self.previous_window
-            print(self.menu)
             self.window.show_view(self.menu)
 
     
@@ -250,30 +252,35 @@ class GameView(arcade.View):
             self.PressRight = False
         
         if self.Start:
-            if self.lenLi >= len(self.List): self.Start = False
+            if self.lenLi >= len(self.List): 
+                #checkWin
+                if self.IM_STAGE[self.c_y][self.c_x] == 2 and self.lenLi >= (len(self.List)-1):
+                    self.menu = LoseOrWinView("Win",level= self.level,menu =self.menu_view,stage =self.previous_window)
+                    self.window.show_view(self.menu)
+                self.Start = False
 
             #GoAhead
             elif self.List[self.lenLi] == 1:
                 if self.dir_cha == 'Down':
-                    self.Character.change_y = -6 #ตอนรูปนิ่ง animation อาจเปลี่ยนแปลงนะจ๊ะ
+                    self.Character.change_y = -8 #ตอนรูปนิ่ง animation อาจเปลี่ยนแปลงนะจ๊ะ
                     if self.Character.center_y <= 678 - ((self.c_y+1)*124):
                         self.Character.change_y = 0
                         self.c_y += 1
                         self.lenLi += 1
                 elif self.dir_cha == 'Up':
-                    self.Character.change_y = 6
+                    self.Character.change_y = 8
                     if self.Character.center_y >= 678 - ((self.c_y-1)*124):
                         self.Character.change_y = 0
                         self.c_y -= 1
                         self.lenLi += 1
                 elif self.dir_cha == 'Right':
-                    self.Character.change_x = +5
+                    self.Character.change_x = 8
                     if self.Character.center_x >= 62.5 + ((self.c_x+1)*125): 
                         self.Character.change_x = 0
                         self.c_x += 1
                         self.lenLi += 1
                 elif self.dir_cha == 'Left':
-                    self.Character.change_x = -5
+                    self.Character.change_x = -8
                     if self.Character.center_x <= 62.5 + ((self.c_x-1)*125):
                         self.Character.change_x = 0
                         self.c_x -= 1
@@ -316,14 +323,17 @@ class GameView(arcade.View):
                 self.Character = arcade.Sprite(self.dirsprite,scale=0.40,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
                 self.list_Character.append(self.Character)
                 self.lenLi += 1
-            
-            #checkBlock
-            #if self.IM_STAGE[self.c_y][self.c_x] != 1 and self.IM_STAGE[self.c_y][self.c_x] != 2:
 
-                    
-            #elif self.IM_STAGE[self.c_y][self.c_x] == 2:
+            #checkLose
+            if self.c_y >= len(self.IM_STAGE) or self.c_y < 0 or self.c_x >= len(self.IM_STAGE[0]) or self.c_x < 0 :
+                self.menu = LoseOrWinView("Lose",level= self.level,menu = self.menu_view,stage = self.previous_window)
+                self.window.show_view(self.menu)
 
-            
+            elif self.IM_STAGE[self.c_y][self.c_x] != 1 and self.IM_STAGE[self.c_y][self.c_x] != 2:
+                self.menu = LoseOrWinView("Lose",level= self.level,menu = self.menu_view,stage = self.previous_window)
+                self.window.show_view(self.menu)
+
+              
 
         self.list_output.update()
         self.list_Character.update()
@@ -364,17 +374,26 @@ class StopButton(TextButton):
         self.game = game
 
     def on_press(self):
-        self.game.list_output = arcade.SpriteList()
-        self.game.List.clear()
-        self.game.Move_x = start_x
-        self.game.Move_y = start_y
+        #self.game.list_output = arcade.SpriteList()
+        #self.game.List.clear()
+        #self.game.Move_x = start_x
+        #self.game.Move_y = start_y
 
         self.pressed = True
 
     def on_release(self):
         if self.pressed:
+            self.game.list_output = arcade.SpriteList()
+            self.game.List.clear()
+            self.game.Move_x = start_x
+            self.game.Move_y = start_y
+            self.game.lenLi = 0
+            self.game.Character.change_y = 0
+            self.game.Character.change_x = 0
+            self.game.Character.remove_from_sprite_lists
+            game = GameView(self.game.previous_window,self.game.level,self.game.menu_view)
+            self.game.window.show_view(game)
             self.pressed = False
-
 
 class forwardButton(TextButton):
     def __init__(self, game, x=0, y=0, width=50, height=50, text="", theme=None):
@@ -428,3 +447,90 @@ def main():
 if __name__ == "__main__":
     main()
     '''
+
+
+class LoseOrWinView(arcade.View):
+    def __init__(self,loseorwin,level = 1,menu=None,stage=None):
+        super().__init__()
+        self.loseorwin = loseorwin
+        self.other = Theme()
+        self.mainmenu = Theme()
+        self.stage = Theme()
+        self.other.set_font(30,arcade.color.WHITE,font_name=('Arial'))
+        self.newlevel = level
+        self.set_buttons()
+        self.mainmenu = menu #รับหน้า menu
+        self.stage = stage #รับหน้า stage
+        arcade.set_background_color(arcade.color.AMAZON)
+
+        #setBackground
+        if self.loseorwin == "Lose":
+            self.background = arcade.load_texture("Resources/View3.png")
+        elif self.loseorwin == "Win":
+            self.background = arcade.load_texture("Resources/game-bg3.png")
+    
+    def set_button_texturesother(self):
+        normal = "Resources/OtherButton/other-btn-normal.png"
+        hover = "Resources/OtherButton/other-btn-normal.png"
+        clicked = "Resources/OtherButton/other-btn-normal.png"
+        locked = "Resources/OtherButton/other-btn-normal.png"
+        self.other.add_button_textures(normal,hover,clicked,locked)
+    
+    def set_buttons(self):
+        self.set_button_texturesother()
+        if self.loseorwin == "Lose":
+            self.button_list.append(Button(x=640,y=430,text='TRY AGAIN',theme= self.other,view= self.newlevel,game=self))
+            self.button_list.append(Button(x=640,y=280,text='MAIN MENU',theme= self.other,view= 0,game=self))
+        elif self.loseorwin == "Win":
+            self.button_list.append(Button(x=640,y=430,text='NEXT LEVEL',theme= self.other,view= self.newlevel,game=self))
+            self.button_list.append(Button(x=640,y=280,text='TRY AGAIN',theme= self.other,view= self.newlevel,game=self))
+            self.button_list.append(Button(x=640,y=130,text='MAIN MENU',theme= self.other,view= 0,game=self))
+
+
+
+    #def on_key_press(self, key, _modifiers):
+       # if self.loseorwin == "Lose":
+
+    
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_lrwh_rectangle_textured(0, 0, WIDTH, HEIGHT, self.background)
+        if self.loseorwin == 'Lose':
+            text = "YOU LOSE !!"
+            fcolor = arcade.color.RED_DEVIL
+        elif self.loseorwin == 'Win':
+            text = "YOU WIN !!"
+            fcolor = arcade.color.GOLDEN_YELLOW
+        arcade.draw_text(text, start_x=640, start_y=590,
+                         color=fcolor, font_size=100, anchor_x="center", anchor_y="center", font_name='Calibri', bold=True)
+        super().on_draw()
+
+class Button(TextButton):
+    def __init__(self, x=0, y=0, width=400, height=115, text="", theme=None,view=None,game=None):
+        super().__init__(x, y, width, height, text, theme=theme)
+        self.view = view
+        self.text = text
+        self.game = game
+
+    def on_press(self):
+        self.pressed = True
+
+    def on_release(self):
+        if self.pressed:
+            self.pressed = False
+            
+            if self.view != None:
+                if self.view == 0:
+                    print('KUY')
+                    menu = self.game.mainmenu
+                elif 1 <= self.view <= 4:
+                    if self.text == 'TRY AGAIN':
+                        menu = GameView(self.game.stage,self.view,self.game.mainmenu)
+                    elif self.text == 'NEXT LEVEL':
+                        menu = GameView(self.game.stage,self.view+1,self.game.mainmenu)
+                elif self.view == 5:
+                    if self.text == 'TRY AGAIN':
+                        menu = GameView(self.game.stage,self.view,self.game.mainmenu)
+                    elif self.text == 'NEXT LEVEL':
+                        menu = self.game.stage
+                self.game.window.show_view(menu)
