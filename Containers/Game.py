@@ -1,9 +1,9 @@
 import arcade
 from arcade.gui import *
-import globalvars as var
+import time
 
-WIDTH = var.SCREEN_WIDTH
-HEIGHT = var.SCREEN_HEIGHT
+WIDTH = 1280
+HEIGHT = 720
 
 # Game Button
 space_y = 60
@@ -202,7 +202,6 @@ class GameView(arcade.View):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-
         if self.PressUp and len(self.List) < 32:
             Button = arcade.Sprite("Resources/Arrow/Arrow-up-normal.png",scale=0.25,center_x=self.Move_x,center_y=self.Move_y)
             self.list_output.append(Button)
@@ -235,9 +234,9 @@ class GameView(arcade.View):
             else:
                 self.Move_x += space_X
             self.PressRight = False
-        
         if self.Start:
-            if self.lenLi >= len(self.List): self.Start = False
+            if self.lenLi >= len(self.List): 
+                self.Start = False
 
             #GoAhead
             elif self.List[self.lenLi] == 1:
@@ -247,18 +246,21 @@ class GameView(arcade.View):
                         self.Character.change_y = 0
                         self.c_y += 1
                         self.lenLi += 1
+                        time.sleep(0.5)
                 elif self.dir_cha == 'Up':
                     self.Character.change_y = 6
                     if self.Character.center_y >= 678 - ((self.c_y-1)*124):
                         self.Character.change_y = 0
                         self.c_y -= 1
                         self.lenLi += 1
+                        time.sleep(0.5)
                 elif self.dir_cha == 'Right':
                     self.Character.change_x = +5
                     if self.Character.center_x >= 62.5 + ((self.c_x+1)*125): 
                         self.Character.change_x = 0
                         self.c_x += 1
                         self.lenLi += 1
+                        time.sleep(0.5)
                 elif self.dir_cha == 'Left':
                     self.c_x -= 1
                     self.Character.change_x = -5
@@ -266,6 +268,7 @@ class GameView(arcade.View):
                         self.Character.change_x = 0
                         self.c_x -= 1
                         self.lenLi += 1
+                        time.sleep(0.5)
                 
             #TurnLeft
             elif self.List[self.lenLi] == 2:
@@ -285,6 +288,7 @@ class GameView(arcade.View):
                 self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
                 self.list_Character.append(self.Character)
                 self.lenLi += 1
+                time.sleep(0.5)
 
             # TurnRight
             elif self.List[self.lenLi] == 3:
@@ -304,6 +308,7 @@ class GameView(arcade.View):
                 self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
                 self.list_Character.append(self.Character)
                 self.lenLi += 1
+                time.sleep(0.5)
             
             #checkBlock
             #if self.IM_STAGE[self.c_y][self.c_x] != 1 and self.IM_STAGE[self.c_y][self.c_x] != 2:
@@ -398,16 +403,17 @@ class turnrightButton(TextButton):
             self.game.PressRight = True
             self.pressed = False
 
+
+# ENABLE THIS FOR DEBUGGING
 SCREEN_TITLE = "Algorithm Adventure"
-'''
+
 def main():
     window = arcade.Window(WIDTH, HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
 
-    game = GameView(3)
+    game = GameView(GameView, 1)
     window.show_view(game)
 
     arcade.run()
 
 if __name__ == "__main__":
     main()
-    '''
