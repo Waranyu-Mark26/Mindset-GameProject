@@ -12,8 +12,91 @@ start_x = 1050
 start_y = 670
 max_x_panel = 1220
 
+class LoseOrWinView(arcade.View):
+    def __init__(self,loseorwin,level = 1,menu=None,stage=None):
+        super().__init__()
+        self.loseorwin = loseorwin
+        self.other = Theme()
+        self.mainmenu = Theme()
+        self.stage = Theme()
+        self.other.set_font(30,arcade.color.WHITE,font_name=('Arial'))
+        self.newlevel = level
+        self.set_buttons()
+        self.mainmenu = menu #รับหน้า menu
+        self.stage = stage #รับหน้า stage
+        arcade.set_background_color(arcade.color.AMAZON)
+
+        #setBackground
+        if self.loseorwin == "Lose":
+            self.background = arcade.load_texture("Resources/game-bg4.jpg")
+        elif self.loseorwin == "Win":
+            self.background = arcade.load_texture("Resources/game-bg3.png")
+    
+    def set_button_texturesother(self):
+        normal = "Resources/OtherButton/other-btn-normal.png"
+        hover = "Resources/OtherButton/other-btn-normal.png"
+        clicked = "Resources/OtherButton/other-btn-normal.png"
+        locked = "Resources/OtherButton/other-btn-normal.png"
+        self.other.add_button_textures(normal,hover,clicked,locked)
+    
+    def set_buttons(self):
+        self.set_button_texturesother()
+        if self.loseorwin == "Lose":
+            self.button_list.append(Button(x=640,y=430,text='TRY AGAIN',theme= self.other,view= self.newlevel,game=self))
+            self.button_list.append(Button(x=640,y=280,text='MAIN MENU',theme= self.other,view= 0,game=self))
+        elif self.loseorwin == "Win":
+            self.button_list.append(Button(x=640,y=430,text='NEXT LEVEL',theme= self.other,view= self.newlevel,game=self))
+            self.button_list.append(Button(x=640,y=280,text='TRY AGAIN',theme= self.other,view= self.newlevel,game=self))
+            self.button_list.append(Button(x=640,y=130,text='MAIN MENU',theme= self.other,view= 0,game=self))
+
+    #def on_key_press(self, key, _modifiers):
+       # if self.loseorwin == "Lose":
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_lrwh_rectangle_textured(0, 0, WIDTH, HEIGHT, self.background)
+        if self.loseorwin == 'Lose':
+            text = "YOU LOSE !!"
+            fcolor = arcade.color.RED_DEVIL
+        elif self.loseorwin == 'Win':
+            text = "YOU WIN !!"
+            fcolor = arcade.color.GOLDEN_YELLOW
+        arcade.draw_text(text, start_x=640, start_y=590,
+                         color=fcolor, font_size=100, anchor_x="center", anchor_y="center", font_name='Calibri', bold=True)
+        super().on_draw()
+
+class Button(TextButton):
+    def __init__(self, x=0, y=0, width=400, height=115, text="", theme=None,view=None,game=None):
+        super().__init__(x, y, width, height, text, theme=theme)
+        self.view = view
+        self.text = text
+        self.game = game
+
+    def on_press(self):
+        self.pressed = True
+
+    def on_release(self):
+        if self.pressed:
+            self.pressed = False
+            
+            if self.view != None:
+                if self.view == 0:
+                    print('KUY')
+                    menu = self.game.mainmenu
+                elif 1 <= self.view <= 4:
+                    if self.text == 'TRY AGAIN':
+                        menu = GameView(self.game.stage,self.view,self.game.mainmenu)
+                    elif self.text == 'NEXT LEVEL':
+                        menu = GameView(self.game.stage,self.view+1,self.game.mainmenu)
+                elif self.view == 5:
+                    if self.text == 'TRY AGAIN':
+                        menu = GameView(self.game.stage,self.view,self.game.mainmenu)
+                    elif self.text == 'NEXT LEVEL':
+                        menu = self.game.stage
+                self.game.window.show_view(menu)
+
 class GameView(arcade.View):
-    def __init__(self,previous_window, level):
+    def __init__(self,previous_window, level,menu):
         super().__init__()
         arcade.set_background_color(arcade.color.AMAZON)
         self.background = arcade.load_texture("Resources/game-bg2.jpg")
@@ -49,9 +132,15 @@ class GameView(arcade.View):
         CreateStageClass.CheckStage(level)
         self.IM_STAGE = CreateStageClass.stage_list
         self.block_list = arcade.SpriteList()
-
+        
+        self.level = level
+        self.menu_view = menu
         self.setup(level)
         self.previous_window = previous_window
+
+        self.iterator = 0
+        self.start_move = True
+    
 
     def set_button_texturesPlay(self):
         normal = "Resources/PlayButton/play-btn-normal.png"
@@ -107,7 +196,7 @@ class GameView(arcade.View):
 
         # Game Control
         self.button_list.append(PlayButton(self, 1100, 80, 130, 130,theme=self.Play))
-        self.button_list.append(StopButton(self, 1210, 60, 80, 80,theme=self.Stop))
+        self.button_list.append(StopButton(self, 1210, 60, 80, 80,theme=self.Stop))     
 
     def setup(self,level):
         # Create your sprites and sprite lists here
@@ -131,23 +220,27 @@ class GameView(arcade.View):
                     Lava = arcade.Sprite(":resources:images/tiles/lava.png",scale=0.65,center_x=62.5+(x*125),center_y=658-(y*124))
                     self.block_list.append(Lava)
         if level == 1:
-            self.Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=306) #y +20 จากตรงกลาง
+            self.dirCharacter = "Resources/Character/character-right.png"
             self.c_x,self.c_y = 0,3
             self.dir_cha = "Right"
         elif level == 2:
-            self.Character = arcade.Sprite("Resources/Animations/Right.png",scale=0.20,center_x=62.5,center_y=554)
+            self.dirCharacter = "Resources/Character/character-right.png"
             self.c_x,self.c_y = 0,1
             self.dir_cha = "Right"
         elif level == 3:
-            self.Character = arcade.Sprite("Resources/Animations/Front.png",scale=0.20,center_x=62.5,center_y=678)
+            self.dirCharacter = "Resources/Character/character-down.png"
             self.c_x,self.c_y = 0,0
             self.dir_cha = "Down"
+        elif level == 4:
+            self.dirCharacter = "Resources/Character/character-up.png"
+            self.c_x,self.c_y = 3,4
+            self.dir_cha = "Up"
+        elif level == 5:
+            self.dirCharacter = "Resources/Character/character-right.png"
+            self.c_x,self.c_y = 0,2
+            self.dir_cha = "Right"
+        self.Character = arcade.Sprite(self.dirCharacter,scale=0.40,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
         self.list_Character.append(self.Character)
-
-    def on_key_press(self, key, _modifiers):
-        if key == arcade.key.ESCAPE:
-            self.menu = self.previous_window
-            self.window.show_view(self.menu)
 
     def on_draw(self):
         """
@@ -196,6 +289,13 @@ class GameView(arcade.View):
         super().on_draw()
         # Call draw() on all your sprite lists below
 
+    def on_key_press(self, key, _modifiers):
+        if key == arcade.key.ESCAPE:
+            self.menu = self.previous_window
+            self.window.show_view(self.menu)
+
+    
+
     def on_update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
@@ -234,89 +334,107 @@ class GameView(arcade.View):
             else:
                 self.Move_x += space_X
             self.PressRight = False
+
+        # Game Section
         if self.Start:
             if self.lenLi >= len(self.List): 
+                #checkWin
+                if self.IM_STAGE[self.c_y][self.c_x] == 2 and self.lenLi >= (len(self.List)-1):
+                    self.menu = LoseOrWinView("Win",level= self.level,menu =self.menu_view,stage =self.previous_window)
+                    self.window.show_view(self.menu)
                 self.Start = False
 
             #GoAhead
             elif self.List[self.lenLi] == 1:
+                if self.start_move:
+                    time.sleep(0.5)
+                    self.list_output[self.lenLi].alpha = 150
+                    self.start_move = False
+
                 if self.dir_cha == 'Down':
-                    self.Character.change_y = -6 #ตอนรูปนิ่ง animation อาจเปลี่ยนแปลงนะจ๊ะ
+                    self.Character.change_y = -8 #ตอนรูปนิ่ง animation อาจเปลี่ยนแปลงนะจ๊ะ
                     if self.Character.center_y <= 678 - ((self.c_y+1)*124):
                         self.Character.change_y = 0
                         self.c_y += 1
                         self.lenLi += 1
-                        time.sleep(0.5)
+
+                        self.start_move = True
                 elif self.dir_cha == 'Up':
-                    self.Character.change_y = 6
+                    self.Character.change_y = 8
                     if self.Character.center_y >= 678 - ((self.c_y-1)*124):
                         self.Character.change_y = 0
                         self.c_y -= 1
                         self.lenLi += 1
-                        time.sleep(0.5)
+
+                        self.start_move = True
                 elif self.dir_cha == 'Right':
-                    self.Character.change_x = +5
+                    self.Character.change_x = 8
                     if self.Character.center_x >= 62.5 + ((self.c_x+1)*125): 
                         self.Character.change_x = 0
                         self.c_x += 1
                         self.lenLi += 1
-                        time.sleep(0.5)
+
+                        self.start_move = True
                 elif self.dir_cha == 'Left':
-                    self.c_x -= 1
-                    self.Character.change_x = -5
+                    self.Character.change_x = -8
                     if self.Character.center_x <= 62.5 + ((self.c_x-1)*125):
                         self.Character.change_x = 0
                         self.c_x -= 1
                         self.lenLi += 1
-                        time.sleep(0.5)
-                
+
+                        self.start_move = True
             #TurnLeft
             elif self.List[self.lenLi] == 2:
                 self.Character.remove_from_sprite_lists()
                 if self.dir_cha == 'Down':
-                    self.dirsprite = "Resources/Animations/Right.png"
+                    self.dirsprite = "Resources/Character/character-right.png"
                     self.dir_cha = 'Right'
                 elif self.dir_cha == 'Up':
-                    self.dirsprite = "Resources/Animations/Left.png"
+                    self.dirsprite = "Resources/Character/character-left.png"
                     self.dir_cha = 'Left'
                 elif self.dir_cha == 'Right':
-                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dirsprite = "Resources/Character/character-up.png"
                     self.dir_cha = 'Up'
                 elif self.dir_cha == 'Left':
-                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dirsprite = "Resources/Character/character-down.png"
                     self.dir_cha = 'Down'
-                self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
+                self.list_output[self.lenLi].alpha = 150
+                self.Character = arcade.Sprite(self.dirsprite,scale=0.40,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
                 self.list_Character.append(self.Character)
                 self.lenLi += 1
-                time.sleep(0.5)
+                time.sleep(0.25)
 
             # TurnRight
             elif self.List[self.lenLi] == 3:
                 self.Character.remove_from_sprite_lists()
                 if self.dir_cha == 'Down':
-                    self.dirsprite = "Resources/Animations/Left.png"
+                    self.dirsprite = "Resources/Character/character-left.png"
                     self.dir_cha = 'Left'
                 elif self.dir_cha == 'Up':
-                    self.dirsprite = "Resources/Animations/Right.png"
+                    self.dirsprite = "Resources/Character/character-right.png"
                     self.dir_cha = 'Right'
                 elif self.dir_cha == 'Right':
-                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dirsprite = "Resources/Character/character-down.png"
                     self.dir_cha = 'Down'
                 elif self.dir_cha == 'Left':
-                    self.dirsprite = "Resources/Animations/Front.png"
+                    self.dirsprite = "Resources/Character/character-up.png"
                     self.dir_cha = 'Up'
-                self.Character = arcade.Sprite(self.dirsprite,scale=0.20,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
+                self.list_output[self.lenLi].alpha = 150
+                self.Character = arcade.Sprite(self.dirsprite,scale=0.40,center_x=62.5+(self.c_x*125),center_y=678-(self.c_y*124))
                 self.list_Character.append(self.Character)
                 self.lenLi += 1
-                time.sleep(0.5)
-            
-            #checkBlock
-            #if self.IM_STAGE[self.c_y][self.c_x] != 1 and self.IM_STAGE[self.c_y][self.c_x] != 2:
+                time.sleep(0.25)
 
-                    
-            #elif self.IM_STAGE[self.c_y][self.c_x] == 2:
+            #checkLose
+            if self.c_y >= len(self.IM_STAGE) or self.c_y < 0 or self.c_x >= len(self.IM_STAGE[0]) or self.c_x < 0 :
+                self.menu = LoseOrWinView("Lose",level= self.level,menu = self.menu_view,stage = self.previous_window)
+                self.window.show_view(self.menu)
 
-            
+            elif self.IM_STAGE[self.c_y][self.c_x] != 1 and self.IM_STAGE[self.c_y][self.c_x] != 2:
+                self.menu = LoseOrWinView("Lose",level= self.level,menu = self.menu_view,stage = self.previous_window)
+                self.window.show_view(self.menu)
+
+              
 
         self.list_output.update()
         self.list_Character.update()
@@ -333,6 +451,10 @@ class CreateStage():
             self.stage_list = [[0,0,0,0,0,0,0,0],[1,1,1,3,1,1,1,2],[0,1,0,0,1,0,0,0],[0,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0]]
         elif stage == 3:
             self.stage_list = [[1,0,1,1,1,0,0,0],[1,0,1,0,1,0,1,2],[1,0,1,0,1,0,1,0],[1,0,1,0,1,0,1,0],[1,1,1,0,1,1,1,0]]
+        elif stage == 4:
+            self.stage_list = [[0,1,1,1,1,0,0,0],[1,2,0,0,1,1,1,1],[3,0,0,0,3,0,0,1],[1,1,1,1,1,1,1,1],[0,0,0,1,0,0,0,0]]
+        elif stage == 5:
+            self.stage_list = [[0,1,1,3,1,1,1,1],[0,1,0,0,1,0,0,1],[1,1,1,3,1,3,1,2],[0,1,0,0,1,0,0,3],[0,1,1,1,1,1,1,1]]
 
 class PlayButton(TextButton):
     def __init__(self, game, x=0, y=0, width=100, height=40, text="", theme=None):
@@ -353,17 +475,26 @@ class StopButton(TextButton):
         self.game = game
 
     def on_press(self):
-        self.game.list_output = arcade.SpriteList()
-        self.game.List.clear()
-        self.game.Move_x = start_x
-        self.game.Move_y = start_y
+        #self.game.list_output = arcade.SpriteList()
+        #self.game.List.clear()
+        #self.game.Move_x = start_x
+        #self.game.Move_y = start_y
 
         self.pressed = True
 
     def on_release(self):
         if self.pressed:
+            self.game.list_output = arcade.SpriteList()
+            self.game.List.clear()
+            self.game.Move_x = start_x
+            self.game.Move_y = start_y
+            self.game.lenLi = 0
+            self.game.Character.change_y = 0
+            self.game.Character.change_x = 0
+            self.game.Character.remove_from_sprite_lists
+            game = GameView(self.game.previous_window,self.game.level,self.game.menu_view)
+            self.game.window.show_view(game)
             self.pressed = False
-
 
 class forwardButton(TextButton):
     def __init__(self, game, x=0, y=0, width=50, height=50, text="", theme=None):
@@ -403,14 +534,12 @@ class turnrightButton(TextButton):
             self.game.PressRight = True
             self.pressed = False
 
-
-# ENABLE THIS FOR DEBUGGING
 SCREEN_TITLE = "Algorithm Adventure"
 
 def main():
     window = arcade.Window(WIDTH, HEIGHT, SCREEN_TITLE, resizable=False, fullscreen=False)
 
-    game = GameView(GameView, 1)
+    game = GameView(GameView, 1, GameView)
     window.show_view(game)
 
     arcade.run()
